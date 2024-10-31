@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DesktopIcon } from "./DesktopIcon";
 import { Window } from "./Window";
-import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Globe, LucideIcon } from "lucide-react"; 
+import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Chrome, LucideIcon } from "lucide-react"; 
 import { GamesContent } from "./window-contents/GamesContent";
 import { AppsContent } from "./window-contents/AppsContent";
 import { PortfolioContent } from "./window-contents/PortfolioContent";
@@ -57,7 +57,7 @@ export function Desktop() {
     { id: "contact", icon: Mail, label: "Contact" },
     { id: "games", icon: Gamepad2, label: "Games" },
     { id: "apps", icon: AppWindow, label: "AppWindow" },
-    { id: "portfolio", icon: Globe, label: "Portfolio" },
+    { id: "portfolio", icon: Chrome, label: "Portfolio" },
   ];
 
   const handleIconClick = (id: string) => {
