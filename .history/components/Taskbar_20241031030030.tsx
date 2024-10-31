@@ -157,10 +157,8 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
             <Button variant="ghost" size="icon">
               <Terminal className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <a href="https://github.com/AntoineGaton" target="_blank" rel="noopener noreferrer">
-                <Github className="h-5 w-5" />
-              </a>
+            <Button variant="ghost" size="icon" h>
+              <Github className="h-5 w-5" />
             </Button>
             <Button variant="ghost" size="icon">
               <Chrome className="h-5 w-5" />
