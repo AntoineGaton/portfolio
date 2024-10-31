@@ -152,16 +152,19 @@ export function Window({
   const startDrag = (e: React.MouseEvent) => {
     const titleBar = windowRef.current?.querySelector('.window-title-bar');
     if (titleBar?.contains(e.target as Node)) {
-      if (isFullscreen) {
-        // Exit fullscreen and restore previous size before starting drag
-        setIsFullscreen(false);
-        setPosition(previousPosition);
-        setSize({ width: 800, height: 600 });
-      }
       setIsDragging(true);
       setDragStart({ x: e.clientX, y: e.clientY });
       setStoredPosition(position);
     }
+
+    setPosition({
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const onDragEnd = () => {
+    setIsDragging(false);
   };
 
   const startResize = (direction: string) => (e: React.MouseEvent) => {
@@ -188,10 +191,10 @@ export function Window({
         isActive ? 'shadow-xl ring-2 ring-primary' : ''
       )}
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: isFullscreen ? 0 : `${position.x}px`,
+        top: isFullscreen ? 0 : `${position.y}px`,
         width: isFullscreen ? '100vw' : `${size.width}px`,
-        height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
+        height: isFullscreen ? 'calc(100vh - 48px)' : `${size.height}px`,
         zIndex: 1000 + windowIndex
       }}
       onClick={onClick}

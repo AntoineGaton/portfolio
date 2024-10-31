@@ -32,15 +32,6 @@ interface DesktopIcon {
   label: string;
 }
 
-// Add this function before the Desktop component
-const calculateNextPosition = (index: number) => {
-  const baseOffset = 50; // Base offset in pixels
-  return {
-    x: baseOffset + (index * 30), // Increment x position for each window
-    y: baseOffset + (index * 30), // Increment y position for each window
-  };
-};
-
 /**
  * Desktop Component
  * Manages the main desktop interface including windows and icons
@@ -83,12 +74,8 @@ export function Desktop() {
         <Window
           key={window.id}
           id={window.id}
-          title={window.id.charAt(0).toUpperCase() + window.id.slice(1)}
-          isActive={true}
           isMinimized={window.isMinimized}
-          isFullscreen={window.id === "portfolio"}
           onClose={() => setOpenWindows(prev => prev.filter(w => w.id !== window.id))}
-          onClick={() => {}}
           onMinimize={() => {
             setOpenWindows(prev =>
               prev.map(w =>
@@ -96,15 +83,11 @@ export function Desktop() {
               )
             );
           }}
-          windowIndex={openWindows.indexOf(window)}
-          initialPosition={window.id === "portfolio" ? 
-            { x: 0, y: 0, width: '100vw', height: '100vh' } : 
-            calculateNextPosition(openWindows.indexOf(window))
-          }
         >
           {window.id === "portfolio" && <PortfolioContent />}
           {window.id === "games" && <GamesContent />}
           {window.id === "apps" && <AppsContent />}
+          {/* Other window contents */}
         </Window>
       ))}
     </div>

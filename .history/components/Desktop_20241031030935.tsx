@@ -86,7 +86,6 @@ export function Desktop() {
           title={window.id.charAt(0).toUpperCase() + window.id.slice(1)}
           isActive={true}
           isMinimized={window.isMinimized}
-          isFullscreen={window.id === "portfolio"}
           onClose={() => setOpenWindows(prev => prev.filter(w => w.id !== window.id))}
           onClick={() => {}}
           onMinimize={() => {
@@ -101,6 +100,7 @@ export function Desktop() {
             { x: 0, y: 0, width: '100vw', height: '100vh' } : 
             calculateNextPosition(openWindows.indexOf(window))
           }
+          isFullscreen={window.id === "portfolio"}
         >
           {window.id === "portfolio" && <PortfolioContent />}
           {window.id === "games" && <GamesContent />}

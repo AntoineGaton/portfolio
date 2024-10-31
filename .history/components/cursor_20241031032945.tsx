@@ -19,17 +19,24 @@ export function Cursor() {
   }, []);
 
   return (
-    <div
-      className="pointer-events-none fixed left-0 top-0 z-[9999] mix-blend-difference"
-      style={{
-        transform: `translate(${position.x - 8}px, ${position.y - 8}px)`,
-      }}
-    >
+    <>
       <div
-        className={`h-4 w-4 rounded-full bg-white transition-transform duration-200 ${
-          isPointer ? "scale-150" : "scale-100"
-        }`}
-      />
-    </div>
+        className="pointer-events-none fixed left-0 top-0 z-50 mix-blend-difference"
+        style={{
+          transform: `translate(${position.x - 8}px, ${position.y - 8}px)`,
+        }}
+      >
+        <div
+          className={`h-4 w-4 rounded-full bg-white transition-transform duration-200 ${
+            isPointer ? "scale-150" : "scale-100"
+          }`}
+        />
+      </div>
+      {/* <style jsx global>{`
+        * {
+          cursor: none !important;
+        }
+      `}</style> */}
+    </>
   );
 }

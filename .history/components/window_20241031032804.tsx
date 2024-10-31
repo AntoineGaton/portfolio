@@ -152,12 +152,6 @@ export function Window({
   const startDrag = (e: React.MouseEvent) => {
     const titleBar = windowRef.current?.querySelector('.window-title-bar');
     if (titleBar?.contains(e.target as Node)) {
-      if (isFullscreen) {
-        // Exit fullscreen and restore previous size before starting drag
-        setIsFullscreen(false);
-        setPosition(previousPosition);
-        setSize({ width: 800, height: 600 });
-      }
       setIsDragging(true);
       setDragStart({ x: e.clientX, y: e.clientY });
       setStoredPosition(position);
@@ -175,6 +169,14 @@ export function Window({
     }
   };
 
+  useEffect(() => {
+    if (defaultIsFullscreen) {
+      setIsFullscreen(true);
+      setPosition({ x: 0, y: 0 });
+      setSize({ width: window.innerWidth, height: window.innerHeight });
+    }
+  }, [defaultIsFullscreen]);
+
   if (isMinimized) {
     return null;
   }
@@ -184,16 +186,34 @@ export function Window({
       ref={windowRef}
       className={cn(
         "fixed bg-background border rounded-lg shadow-lg overflow-hidden select-none",
+        "w-[85vw] sm:w-[75vw] md:w-[65vw] lg:w-[55vw]",
+        "h-[80vh]",
+        "min-w-[300px]",
+        "min-h-[200px]",
         isMinimized && "hidden",
-        isActive ? 'shadow-xl ring-2 ring-primary' : ''
+        isActive ? 'shadow-xl ring-2 ring-primary' : '',
+        "max-w-5xl",
+        "max-h-[85vh]",
+        isDragging && 'cursor-move'
       )}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        width: isFullscreen ? '100vw' : `${size.width}px`,
-        height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
-        zIndex: 1000 + windowIndex
-      }}
+      style={
+        !isFullscreen 
+          ? {
+              left: `${position.x}px`,
+              top: `${position.y}px`,
+              width: `${size.width}px`,
+              height: `${size.height}px`,
+              transform: 'none'
+            }
+          : {
+              left: 0,
+              top: 0,
+              width: '100vw',
+              height: '100vh',
+              maxWidth: '100vw',
+              maxHeight: '100vh'
+            }
+      }
       onClick={onClick}
       onMouseDown={startDrag}
     >

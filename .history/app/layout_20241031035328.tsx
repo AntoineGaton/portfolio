@@ -29,9 +29,8 @@ export default function RootLayout({
         >
           {children}
           <Cursor />
-          {/* <WeatherDrawer /> */}
-        </ThemeProvider>
-      </body>
+ />
+/body>
     </html>
   );
 }

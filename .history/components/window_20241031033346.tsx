@@ -152,12 +152,6 @@ export function Window({
   const startDrag = (e: React.MouseEvent) => {
     const titleBar = windowRef.current?.querySelector('.window-title-bar');
     if (titleBar?.contains(e.target as Node)) {
-      if (isFullscreen) {
-        // Exit fullscreen and restore previous size before starting drag
-        setIsFullscreen(false);
-        setPosition(previousPosition);
-        setSize({ width: 800, height: 600 });
-      }
       setIsDragging(true);
       setDragStart({ x: e.clientX, y: e.clientY });
       setStoredPosition(position);

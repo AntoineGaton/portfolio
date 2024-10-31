@@ -29,7 +29,7 @@ export default function RootLayout({
         >
           {children}
           <Cursor />
-          {/* <WeatherDrawer /> */}
+          <WeatherDrawer />
         </ThemeProvider>
       </body>
     </html>
