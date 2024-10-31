@@ -2,66 +2,72 @@
 
 A unique portfolio website that mimics a modern operating system interface, built with Next.js, TypeScript, and Tailwind CSS.
 
-## 🌟 Features
+## 🚀 Key Features
 
 ### Desktop Environment
-- Fully interactive desktop interface
-- Draggable and resizable windows
-- Window management system (minimize, maximize, close)
-- Taskbar with active window tracking
-- Start menu navigation
-- System tray with clock and theme toggle
 
-### Applications
-- About Me viewer
-- Project showcase
-- Experience timeline
-- Resume viewer
-- Contact form
-- Mini-games
-- Utility apps
+- Interactive desktop interface with draggable icons
+- Advanced window management system with z-index layering:
+  - Loading Screen (z-index: 100)
+  - Taskbar (z-index: 50)
+  - Windows (dynamic z-index)
+- Customizable background with animated effects
+- System taskbar with live clock and weather
+
+### Window System
+
+- Draggable and resizable windows
+- Window state management (minimize, maximize, restore)
+- Smart window positioning
+- Multi-window support with proper z-index handling
+- Window focus management
 
 ### UI Components
-- Custom window management system
-- Context menus
-- Dropdown menus
-- Navigation menus
-- Dialog windows
-- Interactive taskbar
 
-## 🛠 Technology Stack
+- Custom animated loading screen
+- Interactive start menu
+- Dynamic taskbar with window previews
+- System tray with functional widgets
+- Context menus and dropdowns
+
+## 🛠 Tech Stack
 
 - **Framework**: Next.js 14
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: 
+  - Tailwind CSS
+  - Framer Motion for animations
 - **UI Components**: 
   - Radix UI Primitives
   - Shadcn/ui
-- **Animations**: Tailwind CSS animations
+- **3D Graphics**: Three.js
 - **State Management**: React Hooks
 
 ## 🚀 Getting Started
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/AntoineGaton/portfolio.git
 ```
 
-2. Install dependencies:
+1. Install dependencies:
+
 ```bash
 npm install
 # or
 yarn install
 ```
 
-3. Run the development server:
+1. Run the development server:
+
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+1. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ## 📁 Project Structure
 
@@ -85,6 +91,7 @@ portfolio/
 ## 🎨 UI Components
 
 ### Window System
+
 The window system provides a desktop-like experience with:
 - Draggable windows
 - Window state management
@@ -92,6 +99,7 @@ The window system provides a desktop-like experience with:
 - Minimize/Maximize/Close functionality
 
 ### Navigation
+
 Custom navigation components including:
 - Start menu
 - Context menus
@@ -101,6 +109,7 @@ Custom navigation components including:
 ## 🔧 Customization
 
 ### Theme
+
 The portfolio supports light and dark themes through Tailwind CSS. Theme can be toggled via the system tray icon.
 
 ## 📱 Responsive Design
@@ -198,4 +207,4 @@ This project draws inspiration from:
 - GitHub API integration
 - Calendar Integration
 - Battery Status
-- Able to change colors, themes and wallpapers  
+- Able to change colors, themes and wallpapers
