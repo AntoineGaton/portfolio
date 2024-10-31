@@ -50,12 +50,12 @@ export function Window({
   const windowRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [position, setPosition] = useState(initialPosition);
+  const [position, setPosition] = useState({ x: 100, y: 100 });
   const [size, setSize] = useState({ width: 800, height: 600 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
   const [initialSize, setInitialSize] = useState({ width: 0, height: 0 });
-  const [storedPosition, setStoredPosition] = useState({ x: 0, y: 0 });
+  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [previousPosition, setPreviousPosition] = useState({ x: 100, y: 50 });
 
@@ -75,8 +75,8 @@ export function Window({
         const deltaX = e.clientX - dragStart.x;
         const deltaY = e.clientY - dragStart.y;
         setPosition({
-          x: storedPosition.x + deltaX,
-          y: storedPosition.y + deltaY
+          x: initialPosition.x + deltaX,
+          y: initialPosition.y + deltaY
         });
       }
 
@@ -84,14 +84,14 @@ export function Window({
         const deltaX = e.clientX - dragStart.x;
         const deltaY = e.clientY - dragStart.y;
         const newSize = { ...initialSize };
-        const newPosition = { ...storedPosition };
+        const newPosition = { ...initialPosition };
 
         if (resizeDirection.includes('e')) {
           newSize.width = Math.max(300, initialSize.width + deltaX);
         }
         if (resizeDirection.includes('w')) {
           const newWidth = Math.max(300, initialSize.width - deltaX);
-          newPosition.x = storedPosition.x + (initialSize.width - newWidth);
+          newPosition.x = initialPosition.x + (initialSize.width - newWidth);
           newSize.width = newWidth;
         }
         if (resizeDirection.includes('s')) {
@@ -99,7 +99,7 @@ export function Window({
         }
         if (resizeDirection.includes('n')) {
           const newHeight = Math.max(200, initialSize.height - deltaY);
-          newPosition.y = storedPosition.y + (initialSize.height - newHeight);
+          newPosition.y = initialPosition.y + (initialSize.height - newHeight);
           newSize.height = newHeight;
         }
 
@@ -123,14 +123,13 @@ export function Window({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing, dragStart, storedPosition, initialSize, resizeDirection]);
+  }, [isDragging, isResizing, dragStart, initialPosition, initialSize, resizeDirection]);
 
   const startDrag = (e: React.MouseEvent) => {
-    const titleBar = windowRef.current?.querySelector('.window-title-bar');
-    if (titleBar?.contains(e.target as Node)) {
+    if (e.target === windowRef.current) {
       setIsDragging(true);
       setDragStart({ x: e.clientX, y: e.clientY });
-      setStoredPosition(position);
+      setInitialPosition(position);
     }
   };
 
@@ -141,7 +140,7 @@ export function Window({
       setResizeDirection(direction);
       setDragStart({ x: e.clientX, y: e.clientY });
       setInitialSize(size);
-      setStoredPosition(position);
+      setInitialPosition(position);
     }
   };
 
@@ -183,12 +182,11 @@ export function Window({
             }
       }
       onClick={onClick}
-      onMouseDown={startDrag}
     >
       {/* Window Title Bar */}
       <div
-        className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move window-title-bar"
-        onMouseDown={startDrag}
+        className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move"
+        onMouseDown={handleMouseDown}
         onDoubleClick={handleFullscreen}
       >
         <span className="font-medium">{title}</span>
@@ -233,22 +231,19 @@ export function Window({
           </Button>
         </div>
       </div>
-
       {/* Resize handles */}
       {!isFullscreen && (
         <>
-          <div className="absolute inset-0 pointer-events-none border border-transparent" />
-          <div className="absolute top-0 left-0 w-3 h-full cursor-w-resize hover:bg-primary/10" onMouseDown={startResize('w')} />
-          <div className="absolute top-0 right-0 w-3 h-full cursor-e-resize hover:bg-primary/10" onMouseDown={startResize('e')} />
-          <div className="absolute top-0 left-0 h-3 w-full cursor-n-resize hover:bg-primary/10" onMouseDown={startResize('n')} />
-          <div className="absolute bottom-0 left-0 h-3 w-full cursor-s-resize hover:bg-primary/10" onMouseDown={startResize('s')} />
-          <div className="absolute top-0 left-0 w-5 h-5 cursor-nw-resize hover:bg-primary/10" onMouseDown={startResize('nw')} />
-          <div className="absolute top-0 right-0 w-5 h-5 cursor-ne-resize hover:bg-primary/10" onMouseDown={startResize('ne')} />
-          <div className="absolute bottom-0 left-0 w-5 h-5 cursor-sw-resize hover:bg-primary/10" onMouseDown={startResize('sw')} />
-          <div className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize hover:bg-primary/10" onMouseDown={startResize('se')} />
+          <div className="absolute top-0 left-0 w-1 h-full cursor-w-resize" onMouseDown={startResize('w')} />
+          <div className="absolute top-0 right-0 w-1 h-full cursor-e-resize" onMouseDown={startResize('e')} />
+          <div className="absolute top-0 left-0 h-1 w-full cursor-n-resize" onMouseDown={startResize('n')} />
+          <div className="absolute bottom-0 left-0 h-1 w-full cursor-s-resize" onMouseDown={startResize('s')} />
+          <div className="absolute top-0 left-0 w-3 h-3 cursor-nw-resize" onMouseDown={startResize('nw')} />
+          <div className="absolute top-0 right-0 w-3 h-3 cursor-ne-resize" onMouseDown={startResize('ne')} />
+          <div className="absolute bottom-0 left-0 w-3 h-3 cursor-sw-resize" onMouseDown={startResize('sw')} />
+          <div className="absolute bottom-0 right-0 w-3 h-3 cursor-se-resize" onMouseDown={startResize('se')} />
         </>
       )}
-
       {/* Window Content */}
       <div className="p-4 h-[calc(100%-2.5rem)] overflow-auto">
         {children}

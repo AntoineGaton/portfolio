@@ -43,7 +43,6 @@ export function Desktop() {
     isMinimized: boolean;
     position: { x: number; y: number };
   }>>([]);
-  const [activeWindow, setActiveWindow] = useState<string | null>(null);
 
   /**
    * Desktop icons configuration
@@ -120,31 +119,15 @@ export function Desktop() {
     }
   };
 
-  const getWindowPosition = () => {
-    // Calculate a position within the safe bounds of the viewport
-    const padding = 50;
-    const maxX = window.innerWidth - 500 - padding;  // 500 = approx window width
-    const maxY = window.innerHeight - 400 - padding; // 400 = approx window height
-    
-    return {
-      x: Math.max(padding, Math.floor(Math.random() * maxX)),
-      y: Math.max(padding, Math.floor(Math.random() * maxY))
-    };
-  };
-
   const openWindow = (id: string) => {
     setWindows(prev => [
       ...prev,
       {
         id,
         isMinimized: false,
-        position: getWindowPosition()
+        index: prev.length // Use array length as index
       }
     ]);
-  };
-
-  const handleSetActiveWindow = (id: string) => {
-    setActiveWindow(id);
   };
 
   return (
@@ -168,12 +151,12 @@ export function Desktop() {
         return (
           <Window
             key={window.id}
-            initialPosition={window.position}
+            windowIndex={window.index}
             title={icon?.label || ""}
-            isActive={activeWindow === window.id}
+            isActive={windows.some(w => w.id === window.id)}
             isMinimized={window.isMinimized}
             onClose={() => handleCloseWindow(window.id)}
-            onClick={() => handleSetActiveWindow(window.id)}
+            onClick={() => setActiveWindow(window.id)}
             onMinimize={() => handleMinimizeWindow(window.id)}
           >
             {getWindowContent(window.id)}

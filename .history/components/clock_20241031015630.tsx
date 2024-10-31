@@ -16,11 +16,10 @@ export function Clock() {
     const updateDateTime = () => {
       const now = new Date();
       
-      // Format time as "1:54:00 AM"
+      // Format time as "1:54: AM"
       setTime(now.toLocaleTimeString('en-US', {
         hour: 'numeric',
         minute: '2-digit',
-        second: '2-digit',
         hour12: true
       }));
       

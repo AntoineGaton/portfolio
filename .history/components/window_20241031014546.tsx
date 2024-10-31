@@ -47,18 +47,18 @@ export function Window({
   windowIndex,
   initialPosition
 }: WindowProps) {
-  const windowRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isResizing, setIsResizing] = useState(false);
+  // Window state management
   const [position, setPosition] = useState(initialPosition);
-  const [size, setSize] = useState({ width: 800, height: 600 });
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [resizeDirection, setResizeDirection] = useState<string | null>(null);
-  const [initialSize, setInitialSize] = useState({ width: 0, height: 0 });
-  const [storedPosition, setStoredPosition] = useState({ x: 0, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [previousPosition, setPreviousPosition] = useState({ x: 100, y: 50 });
+  const windowRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Handles fullscreen toggle
+   * Stores/restores window position
+   */
   const handleFullscreen = () => {
     if (!isFullscreen) {
       setPreviousPosition(position);
@@ -69,52 +69,27 @@ export function Window({
     setIsFullscreen(!isFullscreen);
   };
 
+  /**
+   * Window dragging effect
+   * Handles mouse movement and position updates
+   */
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (isDragging) {
-        const deltaX = e.clientX - dragStart.x;
-        const deltaY = e.clientY - dragStart.y;
-        setPosition({
-          x: storedPosition.x + deltaX,
-          y: storedPosition.y + deltaY
-        });
-      }
-
-      if (isResizing && resizeDirection) {
-        const deltaX = e.clientX - dragStart.x;
-        const deltaY = e.clientY - dragStart.y;
-        const newSize = { ...initialSize };
-        const newPosition = { ...storedPosition };
-
-        if (resizeDirection.includes('e')) {
-          newSize.width = Math.max(300, initialSize.width + deltaX);
-        }
-        if (resizeDirection.includes('w')) {
-          const newWidth = Math.max(300, initialSize.width - deltaX);
-          newPosition.x = storedPosition.x + (initialSize.width - newWidth);
-          newSize.width = newWidth;
-        }
-        if (resizeDirection.includes('s')) {
-          newSize.height = Math.max(200, initialSize.height + deltaY);
-        }
-        if (resizeDirection.includes('n')) {
-          const newHeight = Math.max(200, initialSize.height - deltaY);
-          newPosition.y = storedPosition.y + (initialSize.height - newHeight);
-          newSize.height = newHeight;
-        }
-
-        setSize(newSize);
+      if (isDragging && windowRef.current && !isFullscreen) {
+        const newPosition = constrainPosition(
+          e.clientX - dragOffset.x,
+          e.clientY - dragOffset.y
+        );
+        
         setPosition(newPosition);
       }
     };
 
     const handleMouseUp = () => {
       setIsDragging(false);
-      setIsResizing(false);
-      setResizeDirection(null);
     };
 
-    if (isDragging || isResizing) {
+    if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove);
       document.addEventListener('mouseup', handleMouseUp);
     }
@@ -123,28 +98,60 @@ export function Window({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing, dragStart, storedPosition, initialSize, resizeDirection]);
+  }, [isDragging, dragOffset, isFullscreen]);
 
-  const startDrag = (e: React.MouseEvent) => {
-    const titleBar = windowRef.current?.querySelector('.window-title-bar');
-    if (titleBar?.contains(e.target as Node)) {
+  /**
+   * Initializes window dragging
+   * @param {React.MouseEvent} e - Mouse event
+   */
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (windowRef.current && !isFullscreen) {
+      const rect = windowRef.current.getBoundingClientRect();
+      setDragOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
       setIsDragging(true);
-      setDragStart({ x: e.clientX, y: e.clientY });
-      setStoredPosition(position);
     }
   };
 
-  const startResize = (direction: string) => (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!isFullscreen) {
-      setIsResizing(true);
-      setResizeDirection(direction);
-      setDragStart({ x: e.clientX, y: e.clientY });
-      setInitialSize(size);
-      setStoredPosition(position);
-    }
+  // Add this function to handle constrained position
+  const constrainPosition = (x: number, y: number) => {
+    if (!windowRef.current) return { x, y };
+    
+    const windowWidth = windowRef.current.offsetWidth;
+    const windowHeight = windowRef.current.offsetHeight;
+    
+    return {
+      x: Math.min(Math.max(0, x), window.innerWidth - windowWidth),
+      y: Math.min(Math.max(0, y), window.innerHeight - windowHeight)
+    };
   };
 
+  // Add this function to generate a random position
+  const getRandomPosition = () => {
+    if (typeof window === 'undefined' || !windowRef.current) return { x: 0, y: 0 };
+    
+    const padding = 50; // Padding from screen edges
+    const windowWidth = windowRef.current.offsetWidth || 500;
+    const windowHeight = windowRef.current.offsetHeight || 400;
+    
+    const maxX = window.innerWidth - windowWidth - padding;
+    const maxY = window.innerHeight - windowHeight - padding;
+    
+    return {
+      x: Math.max(padding, Math.floor(Math.random() * maxX)),
+      y: Math.max(padding, Math.floor(Math.random() * maxY))
+    };
+  };
+
+  // Update the initial position state and useEffect
+  useEffect(() => {
+    const newPosition = calculateNextPosition(windowIndex);
+    setPosition(newPosition);
+  }, [windowIndex]);
+
+  // Return null if window is minimized
   if (isMinimized) {
     return null;
   }
@@ -153,42 +160,41 @@ export function Window({
     <Card
       ref={windowRef}
       className={cn(
-        "fixed bg-background border rounded-lg shadow-lg overflow-hidden select-none",
-        "w-[85vw] sm:w-[75vw] md:w-[65vw] lg:w-[55vw]",
-        "h-[80vh]",
-        "min-w-[300px]",
-        "min-h-[200px]",
+        "fixed bg-background border rounded-lg shadow-lg overflow-hidden",
+        isFullscreen ? (
+          // Fullscreen styles
+          "w-screen h-screen top-0 left-0"
+        ) : (
+          // Normal window styles
+          [
+            "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
+            "h-[50vh] sm:h-[55vh]",
+            "max-w-xl",
+            "max-h-[60vh]"
+          ]
+        ),
         isMinimized && "hidden",
-        isActive ? 'shadow-xl ring-2 ring-primary' : '',
-        "max-w-5xl",
-        "max-h-[85vh]",
-        isDragging && 'cursor-move'
+        isActive ? 'shadow-xl ring-2 ring-primary' : ''
       )}
       style={
         !isFullscreen 
           ? {
               left: `${position.x}px`,
               top: `${position.y}px`,
-              width: `${size.width}px`,
-              height: `${size.height}px`,
               transform: 'none'
             }
           : {
               left: 0,
               top: 0,
-              width: '100vw',
-              height: '100vh',
-              maxWidth: '100vw',
-              maxHeight: '100vh'
+              transform: 'none'
             }
       }
       onClick={onClick}
-      onMouseDown={startDrag}
     >
       {/* Window Title Bar */}
       <div
-        className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move window-title-bar"
-        onMouseDown={startDrag}
+        className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move"
+        onMouseDown={handleMouseDown}
         onDoubleClick={handleFullscreen}
       >
         <span className="font-medium">{title}</span>
@@ -233,22 +239,6 @@ export function Window({
           </Button>
         </div>
       </div>
-
-      {/* Resize handles */}
-      {!isFullscreen && (
-        <>
-          <div className="absolute inset-0 pointer-events-none border border-transparent" />
-          <div className="absolute top-0 left-0 w-3 h-full cursor-w-resize hover:bg-primary/10" onMouseDown={startResize('w')} />
-          <div className="absolute top-0 right-0 w-3 h-full cursor-e-resize hover:bg-primary/10" onMouseDown={startResize('e')} />
-          <div className="absolute top-0 left-0 h-3 w-full cursor-n-resize hover:bg-primary/10" onMouseDown={startResize('n')} />
-          <div className="absolute bottom-0 left-0 h-3 w-full cursor-s-resize hover:bg-primary/10" onMouseDown={startResize('s')} />
-          <div className="absolute top-0 left-0 w-5 h-5 cursor-nw-resize hover:bg-primary/10" onMouseDown={startResize('nw')} />
-          <div className="absolute top-0 right-0 w-5 h-5 cursor-ne-resize hover:bg-primary/10" onMouseDown={startResize('ne')} />
-          <div className="absolute bottom-0 left-0 w-5 h-5 cursor-sw-resize hover:bg-primary/10" onMouseDown={startResize('sw')} />
-          <div className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize hover:bg-primary/10" onMouseDown={startResize('se')} />
-        </>
-      )}
-
       {/* Window Content */}
       <div className="p-4 h-[calc(100%-2.5rem)] overflow-auto">
         {children}

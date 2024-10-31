@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, FolderGames2, ChevronUp, Volume2 } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, FolderGames2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -166,34 +166,19 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
           </div>
           
           {/* Right Section - System Controls */}
-          <div className="flex items-center gap-0.5">
-            {/* System Tray Icons */}
-            <div className="flex items-center">
-              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-                <ChevronUp className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Network, Sound, Battery Group */}
-            <div className="flex items-center px-1 hover:bg-accent rounded-sm">
-              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-                <Wifi className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-                <Volume2 className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-                <Battery className="h-4 w-4" />
-              </Button>
-            </div>
-
-            {/* Date/Time */}
-            <div className="flex items-center px-2 hover:bg-accent rounded-sm min-w-[120px] h-full">
-              <Clock />
-            </div>
-            
-            {/* Show Desktop Button */}
-            <div className="w-px h-full hover:bg-accent" />
+          <div className="flex items-center gap-0.5 pr-4">
+            <Button variant="ghost" size="icon" className="px-1">
+              <Battery className="px-1 h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="px-1"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            >
+              <Sun className="h-4 w-4" />
+            </Button>
+            <Clock />
           </div>
         </div>
       </div>

@@ -238,14 +238,14 @@ export function Window({
       {!isFullscreen && (
         <>
           <div className="absolute inset-0 pointer-events-none border border-transparent" />
-          <div className="absolute top-0 left-0 w-3 h-full cursor-w-resize hover:bg-primary/10" onMouseDown={startResize('w')} />
-          <div className="absolute top-0 right-0 w-3 h-full cursor-e-resize hover:bg-primary/10" onMouseDown={startResize('e')} />
-          <div className="absolute top-0 left-0 h-3 w-full cursor-n-resize hover:bg-primary/10" onMouseDown={startResize('n')} />
-          <div className="absolute bottom-0 left-0 h-3 w-full cursor-s-resize hover:bg-primary/10" onMouseDown={startResize('s')} />
-          <div className="absolute top-0 left-0 w-5 h-5 cursor-nw-resize hover:bg-primary/10" onMouseDown={startResize('nw')} />
-          <div className="absolute top-0 right-0 w-5 h-5 cursor-ne-resize hover:bg-primary/10" onMouseDown={startResize('ne')} />
-          <div className="absolute bottom-0 left-0 w-5 h-5 cursor-sw-resize hover:bg-primary/10" onMouseDown={startResize('sw')} />
-          <div className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize hover:bg-primary/10" onMouseDown={startResize('se')} />
+          <div className="absolute top-0 left-0 w-2 h-full cursor-w-resize hover:border-l-2 border-primary" onMouseDown={startResize('w')} />
+          <div className="absolute top-0 right-0 w-2 h-full cursor-e-resize hover:border-r-2 border-primary" onMouseDown={startResize('e')} />
+          <div className="absolute top-0 left-0 h-2 w-full cursor-n-resize hover:border-t-2 border-primary" onMouseDown={startResize('n')} />
+          <div className="absolute bottom-0 left-0 h-2 w-full cursor-s-resize hover:border-b-2 border-primary" onMouseDown={startResize('s')} />
+          <div className="absolute top-0 left-0 w-4 h-4 cursor-nw-resize" onMouseDown={startResize('nw')} />
+          <div className="absolute top-0 right-0 w-4 h-4 cursor-ne-resize" onMouseDown={startResize('ne')} />
+          <div className="absolute bottom-0 left-0 w-4 h-4 cursor-sw-resize" onMouseDown={startResize('sw')} />
+          <div className="absolute bottom-0 right-0 w-4 h-4 cursor-se-resize" onMouseDown={startResize('se')} />
         </>
       )}
 

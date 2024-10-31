@@ -43,7 +43,6 @@ export function Desktop() {
     isMinimized: boolean;
     position: { x: number; y: number };
   }>>([]);
-  const [activeWindow, setActiveWindow] = useState<string | null>(null);
 
   /**
    * Desktop icons configuration
@@ -143,10 +142,6 @@ export function Desktop() {
     ]);
   };
 
-  const handleSetActiveWindow = (id: string) => {
-    setActiveWindow(id);
-  };
-
   return (
     <div className="h-[calc(100vh-48px)] w-full p-4">
       {/* Desktop Icons Grid */}
@@ -170,10 +165,10 @@ export function Desktop() {
             key={window.id}
             initialPosition={window.position}
             title={icon?.label || ""}
-            isActive={activeWindow === window.id}
+            isActive={windows.some(w => w.id === window.id)}
             isMinimized={window.isMinimized}
             onClose={() => handleCloseWindow(window.id)}
-            onClick={() => handleSetActiveWindow(window.id)}
+            onClick={() => setActiveWindow(window.id)}
             onMinimize={() => handleMinimizeWindow(window.id)}
           >
             {getWindowContent(window.id)}
