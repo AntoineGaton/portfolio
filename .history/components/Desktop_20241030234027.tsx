@@ -19,19 +19,6 @@ interface WindowState {
 }
 
 /**
- * Desktop Icon Configuration
- * @interface DesktopIcon
- * @property {string} id - Unique identifier for the icon
- * @property {LucideIcon} icon - Icon component to display
- * @property {string} label - Text label for the icon
- */
-interface DesktopIcon {
-  id: string;
-  icon: LucideIcon;
-  label: string;
-}
-
-/**
  * Desktop Component
  * Manages the main desktop interface including windows and icons
  * @component

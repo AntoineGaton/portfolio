@@ -1,3 +1,7 @@
+/**
+ * @description: Desktop component for the application
+ * @file: Desktop.tsx
+*/
 "use client";
 
 import { useState } from "react";

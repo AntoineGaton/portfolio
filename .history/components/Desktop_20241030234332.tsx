@@ -1,3 +1,7 @@
+/**
+ * @description: Desktop component for the application
+ * @file: Desktop.tsx
+*/
 "use client";
 
 import { useState } from "react";
@@ -19,16 +23,24 @@ interface WindowState {
 }
 
 /**
- * Desktop Icon Configuration
- * @interface DesktopIcon
- * @property {string} id - Unique identifier for the icon
- * @property {LucideIcon} icon - Icon component to display
- * @property {string} label - Text label for the icon
+ * Window Props Interface
+ * @interface WindowProps
+ * @property {string} title - Window title
+ * @property {ReactNode} children - Window content
+ * @property {boolean} isActive - Whether window is currently focused
+ * @property {boolean} isMinimized - Whether window is minimized
+ * @property {() => void} onClose - Close handler
+ * @property {() => void} onClick - Click handler
+ * @property {() => void} onMinimize - Minimize handler
  */
-interface DesktopIcon {
-  id: string;
-  icon: LucideIcon;
-  label: string;
+interface WindowProps {
+  title: string;
+  children: React.ReactNode;
+  isActive: boolean;
+  isMinimized: boolean;
+  onClose: () => void;
+  onClick: () => void;
+  onMinimize: () => void;
 }
 
 /**

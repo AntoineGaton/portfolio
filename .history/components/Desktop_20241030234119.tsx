@@ -1,3 +1,13 @@
+/** 
+ * @author: @matt-j-smith
+ * @description: Desktop component for the application
+ * @version: 1.0.0
+ * @date: 2024-10-31
+ * @copyright: 2024 Matt Smith
+ * @license: MIT
+ * @last-modified: 2024-10-31
+ * 
+*/
 "use client";
 
 import { useState } from "react";
@@ -16,19 +26,6 @@ import { AppsContent } from "./window-contents/AppsContent";
 interface WindowState {
   id: string;
   isMinimized: boolean;
-}
-
-/**
- * Desktop Icon Configuration
- * @interface DesktopIcon
- * @property {string} id - Unique identifier for the icon
- * @property {LucideIcon} icon - Icon component to display
- * @property {string} label - Text label for the icon
- */
-interface DesktopIcon {
-  id: string;
-  icon: LucideIcon;
-  label: string;
 }
 
 /**

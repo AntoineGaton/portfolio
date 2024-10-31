@@ -31,32 +31,6 @@ interface WindowProps {
  * Provides a draggable, resizable window interface
  * @component
  */
-/**
- * Window Props Interface
- * @interface WindowProps
- * @property {string} title - Window title
- * @property {ReactNode} children - Window content
- * @property {boolean} isActive - Whether window is currently focused
- * @property {boolean} isMinimized - Whether window is minimized
- * @property {() => void} onClose - Close handler
- * @property {() => void} onClick - Click handler
- * @property {() => void} onMinimize - Minimize handler
- */
-interface WindowProps {
-  title: string;
-  children: React.ReactNode;
-  isActive: boolean;
-  isMinimized: boolean;
-  onClose: () => void;
-  onClick: () => void;
-  onMinimize: () => void;
-}
-
-/**
- * Window Component
- * Provides a draggable, resizable window interface
- * @component
- */
 export function Window({
   title,
   children,
