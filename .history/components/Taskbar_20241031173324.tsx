@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -54,7 +54,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
       case "resume": return FileText;
       case "contact": return Mail;
       case "games": return Gamepad2;
-      case "app": return AppWindow;
       default: return Monitor;
     }
   };

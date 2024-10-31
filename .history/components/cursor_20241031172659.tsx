@@ -1,4 +1,4 @@
-// Not used anymore but keeping it for now as it's a good example of a custom cursor.
+// Not 
 "use client";
 
 import { useEffect, useState } from "react";

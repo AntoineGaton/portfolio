@@ -6,12 +6,11 @@ import { Calculator } from "../apps/Calculator";
 import { Notepad } from "../apps/Notepad";
 import { WeatherApp } from "../apps/WeatherApp";
 import { Calculator as CalculatorIcon, FileText, Cloud } from "lucide-react";
-import { LucideIcon } from "lucide-react";
 
 interface App {
   id: string;
   name: string;
-  icon: LucideIcon;
+  icon: React.ComponentType;
   component: React.ComponentType;
 }
 
