@@ -27,6 +27,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          {/* <Cursor /> */}
           {/* <WeatherDrawer /> */}
         </ThemeProvider>
       </body>
