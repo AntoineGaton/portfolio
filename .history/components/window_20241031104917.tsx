@@ -36,7 +36,7 @@ interface WindowProps {
   onClick: () => void;
   onMinimize: () => void;
   windowIndex: number;
-  initialPosition?: {
+  initialPosition: {
     x: number;
     y: number;
     width?: string;
@@ -59,12 +59,13 @@ export function Window({
   onClick,
   onMinimize,
   windowIndex,
+  initialPosition,
   defaultIsFullscreen = false
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [position, setPosition] = useState(calculateNextPosition(windowIndex));
+  const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
@@ -213,7 +214,7 @@ export function Window({
         top: `${position.y}px`,
         width: isFullscreen ? '100vw' : `${size.width}px`,
         height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
-        zIndex: windowIndex
+        zIndex: 100 + windowIndex
       }}
       onClick={onClick}
       onMouseDown={startDrag}
@@ -297,19 +298,12 @@ const MAX_POSITIONS = 5; // how many positions before reset
 const calculateNextPosition = (windowIndex: number) => {
   if (typeof window === 'undefined') return { x: 0, y: 0 };
   
-  // Calculate random position within safe bounds
-  const maxX = window.innerWidth - 800;  // 800 is default window width
-  const maxY = window.innerHeight - 648;  // 600 + 48 for default height + taskbar
+  // Create a cascading effect
+  const baseX = 50 + (windowIndex % MAX_POSITIONS) * GRID_SIZE;
+  const baseY = 50 + (windowIndex % MAX_POSITIONS) * GRID_SIZE;
   
-  const x = Math.max(0, Math.min(
-    Math.floor(Math.random() * maxX),
-    maxX
-  ));
-  
-  const y = Math.max(0, Math.min(
-    Math.floor(Math.random() * maxY),
-    maxY
-  ));
-  
-  return { x, y };
+  return {
+    x: Math.min(baseX, window.innerWidth - 500), // 500 is approximate window width
+    y: Math.min(baseY, window.innerHeight - 400) // 400 is approximate window height
+  };
 };

@@ -36,7 +36,7 @@ interface WindowProps {
   onClick: () => void;
   onMinimize: () => void;
   windowIndex: number;
-  initialPosition?: {
+  initialPosition: {
     x: number;
     y: number;
     width?: string;
@@ -59,12 +59,13 @@ export function Window({
   onClick,
   onMinimize,
   windowIndex,
+  initialPosition,
   defaultIsFullscreen = false
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [position, setPosition] = useState(calculateNextPosition(windowIndex));
+  const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);

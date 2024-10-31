@@ -36,7 +36,7 @@ interface WindowProps {
   onClick: () => void;
   onMinimize: () => void;
   windowIndex: number;
-  initialPosition?: {
+  initialPosition: {
     x: number;
     y: number;
     width?: string;
@@ -59,12 +59,13 @@ export function Window({
   onClick,
   onMinimize,
   windowIndex,
+  initialPosition,
   defaultIsFullscreen = false
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
-  const [position, setPosition] = useState(calculateNextPosition(windowIndex));
+  const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState({ width: 800, height: 600 });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
@@ -72,6 +73,8 @@ export function Window({
   const [storedPosition, setStoredPosition] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(defaultIsFullscreen);
   const [previousPosition, setPreviousPosition] = useState({ x: 100, y: 50 });
+  const [isSnapped, setIsSnapped] = useState<'left' | 'right' | 'top' | 'bottom' | null>(null);
+  const SNAP_THRESHOLD = 50; // pixels from edge to trigger snap
 
   useEffect(() => {
     if (defaultIsFullscreen) {
@@ -113,6 +116,43 @@ export function Window({
         newX = Math.max(0, Math.min(newX, maxX));
         newY = Math.max(0, Math.min(newY, maxY));
 
+        // Check for snap zones
+        if (newX < SNAP_THRESHOLD) {
+          // Snap to left
+          setIsSnapped('left');
+          newX = 0;
+          setSize({
+            width: window.innerWidth / 2,
+            height: window.innerHeight - 48
+          });
+        } else if (newX + size.width > window.innerWidth - SNAP_THRESHOLD) {
+          // Snap to right
+          setIsSnapped('right');
+          newX = window.innerWidth / 2;
+          setSize({
+            width: window.innerWidth / 2,
+            height: window.innerHeight - 48
+          });
+        } else if (newY < SNAP_THRESHOLD) {
+          // Snap to top
+          setIsSnapped('top');
+          newY = 0;
+          setSize({
+            width: window.innerWidth,
+            height: (window.innerHeight - 48) / 2
+          });
+        } else if (newY + size.height > window.innerHeight - SNAP_THRESHOLD) {
+          // Snap to bottom
+          setIsSnapped('bottom');
+          newY = (window.innerHeight - 48) / 2;
+          setSize({
+            width: window.innerWidth,
+            height: (window.innerHeight - 48) / 2
+          });
+        } else {
+          setIsSnapped(null);
+        }
+
         setPosition({ x: newX, y: newY });
       }
 
@@ -144,7 +184,7 @@ export function Window({
         if (resizeDirection.includes('n')) {
           const maxHeight = storedPosition.y + initialSize.height;
           const newHeight = Math.max(200, initialSize.height - deltaY);
-          newPosition.y = Math.max(0, Math.min(maxHeight - 200, storedPosition.y + (initialSize.height - newHeight)));
+          newPosition.y = storedPosition.y + (initialSize.height - newHeight);
           newSize.height = newHeight;
         }
 
@@ -168,7 +208,7 @@ export function Window({
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
     };
-  }, [isDragging, isResizing, dragStart, storedPosition, initialSize, resizeDirection, size.width, size.height]);
+  }, [isDragging, isResizing, dragStart, storedPosition, initialSize, resizeDirection]);
 
   const startDrag = (e: React.MouseEvent) => {
     const titleBar = windowRef.current?.querySelector('.window-title-bar');
@@ -213,7 +253,7 @@ export function Window({
         top: `${position.y}px`,
         width: isFullscreen ? '100vw' : `${size.width}px`,
         height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
-        zIndex: windowIndex
+        zIndex: 1000 + windowIndex
       }}
       onClick={onClick}
       onMouseDown={startDrag}
@@ -297,19 +337,12 @@ const MAX_POSITIONS = 5; // how many positions before reset
 const calculateNextPosition = (windowIndex: number) => {
   if (typeof window === 'undefined') return { x: 0, y: 0 };
   
-  // Calculate random position within safe bounds
-  const maxX = window.innerWidth - 800;  // 800 is default window width
-  const maxY = window.innerHeight - 648;  // 600 + 48 for default height + taskbar
+  // Create a cascading effect
+  const baseX = 50 + (windowIndex % MAX_POSITIONS) * GRID_SIZE;
+  const baseY = 50 + (windowIndex % MAX_POSITIONS) * GRID_SIZE;
   
-  const x = Math.max(0, Math.min(
-    Math.floor(Math.random() * maxX),
-    maxX
-  ));
-  
-  const y = Math.max(0, Math.min(
-    Math.floor(Math.random() * maxY),
-    maxY
-  ));
-  
-  return { x, y };
+  return {
+    x: Math.min(baseX, window.innerWidth - 500), // 500 is approximate window width
+    y: Math.min(baseY, window.innerHeight - 400) // 400 is approximate window height
+  };
 };
