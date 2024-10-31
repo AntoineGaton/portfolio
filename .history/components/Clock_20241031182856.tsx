@@ -2,6 +2,12 @@
 
 import { useState, useEffect } from "react";
 
+/**
+ * Clock Component
+ * Displays current time in the taskbar
+ * Updates every second
+ * @component
+ */
 export function Clock() {
    const [time, setTime] = useState<string>('');
    const [date, setDate] = useState<string>('');
