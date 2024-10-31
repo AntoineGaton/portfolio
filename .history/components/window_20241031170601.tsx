@@ -45,7 +45,6 @@ interface WindowProps {
     height?: string;
   };
   isFullscreen?: boolean;
-  defaultIsFullscreen?: boolean;
 }
 
 /**

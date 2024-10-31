@@ -45,7 +45,6 @@ interface WindowProps {
     height?: string;
   };
   isFullscreen?: boolean;
-  defaultIsFullscreen?: boolean;
 }
 
 /**
@@ -62,7 +61,7 @@ export function Window({
   onClick,
   onMinimize,
   windowIndex,
-  defaultIsFullscreen = false
+//   defaultIsFullscreen = false
 }: WindowProps) {
   const windowRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
