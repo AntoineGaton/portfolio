@@ -8,64 +8,38 @@ import { Clock } from "./Clock";
 import { useTheme } from "next-themes";
 import { TaskbarIcon } from "./TaskbarIcon";
 
-/**
- * Taskbar Props Interface
- * @interface TaskbarProps
- * @property {Array<{id: string, isMinimized: boolean}>} openWindows - Currently open windows
- * @property {(id: string) => void} onWindowRestore - Handler for restoring minimized windows
- */
 interface TaskbarProps {
   openWindows: Array<{ id: string; isMinimized: boolean }>;
   onWindowRestore: (id: string) => void;
 }
 
-/**
- * Weather State Interface
- * @interface WeatherState
- * @property {number} temp - Temperature in Fahrenheit
- * @property {string} condition - Weather condition description
- */
-interface WeatherState {
-  temp: number;
-  condition: string;
-}
-
-/**
- * Taskbar Component
- * Provides system-wide controls and window management
- * @component
- */
 export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
-  // State management
   const [centerMenuOpen, setCenterMenuOpen] = useState(false);
-  const [weather, setWeather] = useState<WeatherState | null>(null);
+  const [weather, setWeather] = useState<{ temp: number; condition: string } | null>(null);
   const { theme, setTheme } = useTheme();
 
-  /**
-   * Maps window IDs to their corresponding icons
-   * @param {string} id - Window identifier
-   * @returns {LucideIcon} Corresponding icon component
-   */
   const getIconForWindow = (id: string) => {
     switch (id) {
-      case "about": return User2;
-      case "projects": return Code2;
-      case "experience": return Briefcase;
-      case "resume": return FileText;
-      case "contact": return Mail;
-      case "games": return FolderGames2;
-      default: return Monitor;
+      case "about":
+        return User2;
+      case "projects":
+        return Code2;
+      case "experience":
+        return Briefcase;
+      case "resume":
+        return FileText;
+      case "contact":
+        return Mail;
+      case "games":
+        return FolderGames2;
+      default:
+        return Monitor;
     }
   };
 
-  /**
-   * Fetches weather information
-   * Currently uses mock data, can be connected to real API
-   */
   useEffect(() => {
     const getWeather = async () => {
       try {
-        // Mock weather data - replace with actual API call
         const mockWeather = { temp: 72, condition: "Partly Cloudy" };
         setWeather(mockWeather);
       } catch (error) {
@@ -76,9 +50,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
     getWeather();
   }, []);
 
-  /**
-   * Handles clicking outside center menu to close it
-   */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -100,7 +71,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
     <>
       <div className="fixed bottom-0 left-0 right-0 h-12 bg-background/80 backdrop-blur-lg border-t">
         <div className="flex items-center justify-between h-full px-2">
-          {/* Left Section - Weather */}
           <div className="flex items-center gap-4">
             {weather && (
               <div className="flex items-center gap-2 text-sm">
@@ -111,9 +81,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
             )}
           </div>
 
-          {/* Center Section - Open Windows and Quick Actions */}
           <div className="flex items-center gap-1">
-            {/* Center Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -123,7 +91,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
               <Monitor className="h-5 w-5" />
             </Button>
 
-            {/* Open Windows */}
             {openWindows.map((window) => {
               const Icon = getIconForWindow(window.id);
               return (
@@ -136,7 +103,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
               );
             })}
 
-            {/* Search Bar */}
             <div className="relative flex items-center mx-2 h-8">
               <Search className="absolute left-2 h-4 w-4 text-muted-foreground pointer-events-none" />
               <input
@@ -147,7 +113,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
               />
             </div>
 
-            {/* Quick Access Icons */}
             <Button variant="ghost" size="icon">
               <Mail className="h-5 w-5" />
             </Button>
@@ -165,7 +130,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
             </Button>
           </div>
           
-          {/* Right Section - System Controls */}
           <div className="flex items-center gap-4 pr-4">
             <Button variant="ghost" size="icon">
               <Wifi className="h-4 w-4" />
@@ -184,8 +148,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
           </div>
         </div>
       </div>
-
-      {/* Center Menu Overlay */}
       {centerMenuOpen && (
         <div className="center-menu">
           <CenterMenu onClose={() => setCenterMenuOpen(false)} />

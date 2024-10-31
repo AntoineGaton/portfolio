@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Save, FileDown, FileUp } from "lucide-react";
@@ -66,58 +66,37 @@ export function Notepad() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Toolbar */}
-      <div className="flex items-center gap-2 p-2 border-b">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleSave}
-          className="flex items-center gap-2"
-        >
-          <Save className="h-4 w-4" />
-          Save
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleDownload}
-          className="flex items-center gap-2"
-        >
-          <FileDown className="h-4 w-4" />
-          Download
-        </Button>
-        <label>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex items-center gap-2"
-            asChild
-          >
-            <div>
-              <FileUp className="h-4 w-4" />
-              Upload
-            </div>
+    <Card className="p-4">
+      <div className="flex items-center justify-between mb-4">
+        <input
+          type="text"
+          value={fileName}
+          onChange={(e) => setFileName(e.target.value)}
+          className="bg-transparent border-none focus:outline-none text-lg font-medium"
+        />
+        <div className="flex gap-2">
+          <Button variant="outline" size="icon" onClick={handleSave}>
+            <Save className="h-4 w-4" />
           </Button>
-          <input
-            type="file"
-            accept=".txt"
-            className="hidden"
-            onChange={handleFileUpload}
-          />
-        </label>
-        <span className="ml-auto text-sm text-muted-foreground">
-          {saved ? "Saved" : "Unsaved"}
-        </span>
+          <Button variant="outline" size="icon" asChild>
+            <label>
+              <FileUp className="h-4 w-4" />
+              <input
+                type="file"
+                accept=".txt"
+                className="hidden"
+                onChange={handleFileUpload}
+              />
+            </label>
+          </Button>
+        </div>
       </div>
-
-      {/* Editor */}
       <textarea
         value={content}
         onChange={handleChange}
-        className="flex-1 p-4 resize-none focus:outline-none bg-background"
+        className="w-full h-[400px] p-4 bg-secondary/50 rounded-lg resize-none focus:outline-none"
         placeholder="Start typing..."
       />
-    </div>
+    </Card>
   );
 }
