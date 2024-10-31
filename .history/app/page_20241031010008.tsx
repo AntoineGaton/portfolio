@@ -3,11 +3,8 @@
  * @component
  * TODO: Add mobile layout
  * TODO: Add more apps
- * TODO: Add ability to change colors, themes and wallpapers
+ * TODO: Add more system utilities
  * TODO: Add LinkedIn and GitHub API integrations
- * TODO: Add Calendar Integration
- * TODO: Add Battery Status
- * TODO: Add System Tray Icons
  */
 "use client";
 

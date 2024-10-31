@@ -42,7 +42,7 @@ export function Window({
   onMinimize
 }: WindowProps) {
   // Window state management
-  const [position, setPosition] = useState({ x: window?.innerWidth / 2 - 300, y: window?.innerHeight / 2 - 200 });
+  const [position, setPosition] = useState({ x: 100, y: 50 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -56,7 +56,6 @@ export function Window({
   const handleFullscreen = () => {
     if (!isFullscreen) {
       setPreviousPosition(position);
-      setPosition({ x: 0, y: 0 });
     } else {
       setPosition(previousPosition);
     }
@@ -70,12 +69,10 @@ export function Window({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && windowRef.current && !isFullscreen) {
-        const newPosition = constrainPosition(
-          e.clientX - dragOffset.x,
-          e.clientY - dragOffset.y
-        );
-        
-        setPosition(newPosition);
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y
+        });
       }
     };
 
@@ -109,34 +106,6 @@ export function Window({
     }
   };
 
-  // Add this function to handle constrained position
-  const constrainPosition = (x: number, y: number) => {
-    if (!windowRef.current) return { x, y };
-    
-    const windowWidth = windowRef.current.offsetWidth;
-    const windowHeight = windowRef.current.offsetHeight;
-    
-    return {
-      x: Math.min(Math.max(0, x), window.innerWidth - windowWidth),
-      y: Math.min(Math.max(0, y), window.innerHeight - windowHeight)
-    };
-  };
-
-  // Update the initial position setting
-  useEffect(() => {
-    if (typeof window !== 'undefined' && windowRef.current) {
-      const windowWidth = windowRef.current.offsetWidth;
-      const windowHeight = windowRef.current.offsetHeight;
-      
-      const newPosition = constrainPosition(
-        window.innerWidth / 2 - windowWidth / 2,
-        window.innerHeight / 2 - windowHeight / 2
-      );
-      
-      setPosition(newPosition);
-    }
-  }, []);
-
   // Return null if window is minimized
   if (isMinimized) {
     return null;
@@ -147,33 +116,21 @@ export function Window({
       ref={windowRef}
       className={cn(
         "fixed bg-background border rounded-lg shadow-lg overflow-hidden",
-        isFullscreen ? (
-          // Fullscreen styles
-          "w-screen h-screen top-0 left-0"
-        ) : (
-          // Normal window styles
-          [
-            "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
-            "h-[50vh] sm:h-[55vh]",
-            "max-w-xl",
-            "max-h-[60vh]"
-          ]
-        ),
+        "w-[60vw] sm:w-[55vw] md:w-[50vw] lg:w-[45vw]",
+        "h-[60vh] sm:h-[65vh]",
+        "left-[50%] top-[50%] transform -translate-x-1/2 -translate-y-1/2",
         isMinimized && "hidden",
-        isActive ? 'shadow-xl ring-2 ring-primary' : ''
+        isActive ? 'shadow-xl ring-2 ring-primary' : '',
+        "max-w-3xl",
+        "max-h-[75vh]"
       )}
       style={
         !isFullscreen 
           ? {
               left: `${position.x}px`,
-              top: `${position.y}px`,
-              transform: 'none'
+              top: `${position.y}px`
             }
-          : {
-              left: 0,
-              top: 0,
-              transform: 'none'
-            }
+          : undefined
       }
       onClick={onClick}
     >

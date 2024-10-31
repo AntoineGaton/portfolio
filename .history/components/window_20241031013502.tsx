@@ -56,7 +56,6 @@ export function Window({
   const handleFullscreen = () => {
     if (!isFullscreen) {
       setPreviousPosition(position);
-      setPosition({ x: 0, y: 0 });
     } else {
       setPosition(previousPosition);
     }

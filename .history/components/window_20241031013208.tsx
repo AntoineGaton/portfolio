@@ -56,7 +56,6 @@ export function Window({
   const handleFullscreen = () => {
     if (!isFullscreen) {
       setPreviousPosition(position);
-      setPosition({ x: 0, y: 0 });
     } else {
       setPosition(previousPosition);
     }
@@ -70,12 +69,10 @@ export function Window({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && windowRef.current && !isFullscreen) {
-        const newPosition = constrainPosition(
-          e.clientX - dragOffset.x,
-          e.clientY - dragOffset.y
-        );
-        
-        setPosition(newPosition);
+        setPosition({
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y
+        });
       }
     };
 
@@ -109,31 +106,13 @@ export function Window({
     }
   };
 
-  // Add this function to handle constrained position
-  const constrainPosition = (x: number, y: number) => {
-    if (!windowRef.current) return { x, y };
-    
-    const windowWidth = windowRef.current.offsetWidth;
-    const windowHeight = windowRef.current.offsetHeight;
-    
-    return {
-      x: Math.min(Math.max(0, x), window.innerWidth - windowWidth),
-      y: Math.min(Math.max(0, y), window.innerHeight - windowHeight)
-    };
-  };
-
-  // Update the initial position setting
+  // Add a useEffect to handle initial positioning
   useEffect(() => {
-    if (typeof window !== 'undefined' && windowRef.current) {
-      const windowWidth = windowRef.current.offsetWidth;
-      const windowHeight = windowRef.current.offsetHeight;
-      
-      const newPosition = constrainPosition(
-        window.innerWidth / 2 - windowWidth / 2,
-        window.innerHeight / 2 - windowHeight / 2
-      );
-      
-      setPosition(newPosition);
+    if (typeof window !== 'undefined') {
+      setPosition({
+        x: window.innerWidth / 2 - 300,
+        y: window.innerHeight / 2 - 200
+      });
     }
   }, []);
 
@@ -147,33 +126,21 @@ export function Window({
       ref={windowRef}
       className={cn(
         "fixed bg-background border rounded-lg shadow-lg overflow-hidden",
-        isFullscreen ? (
-          // Fullscreen styles
-          "w-screen h-screen top-0 left-0"
-        ) : (
-          // Normal window styles
-          [
-            "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
-            "h-[50vh] sm:h-[55vh]",
-            "max-w-xl",
-            "max-h-[60vh]"
-          ]
-        ),
+        "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
+        "h-[50vh] sm:h-[55vh]",
         isMinimized && "hidden",
-        isActive ? 'shadow-xl ring-2 ring-primary' : ''
+        isActive ? 'shadow-xl ring-2 ring-primary' : '',
+        "max-w-xl",
+        "max-h-[60vh]"
       )}
       style={
         !isFullscreen 
           ? {
               left: `${position.x}px`,
               top: `${position.y}px`,
-              transform: 'none'
+              transform: 'none' // Remove the transform if using absolute positioning
             }
-          : {
-              left: 0,
-              top: 0,
-              transform: 'none'
-            }
+          : undefined
       }
       onClick={onClick}
     >

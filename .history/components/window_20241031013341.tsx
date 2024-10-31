@@ -56,7 +56,6 @@ export function Window({
   const handleFullscreen = () => {
     if (!isFullscreen) {
       setPreviousPosition(position);
-      setPosition({ x: 0, y: 0 });
     } else {
       setPosition(previousPosition);
     }
@@ -147,33 +146,21 @@ export function Window({
       ref={windowRef}
       className={cn(
         "fixed bg-background border rounded-lg shadow-lg overflow-hidden",
-        isFullscreen ? (
-          // Fullscreen styles
-          "w-screen h-screen top-0 left-0"
-        ) : (
-          // Normal window styles
-          [
-            "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
-            "h-[50vh] sm:h-[55vh]",
-            "max-w-xl",
-            "max-h-[60vh]"
-          ]
-        ),
+        "w-[40vw] sm:w-[35vw] md:w-[30vw] lg:w-[25vw]",
+        "h-[50vh] sm:h-[55vh]",
         isMinimized && "hidden",
-        isActive ? 'shadow-xl ring-2 ring-primary' : ''
+        isActive ? 'shadow-xl ring-2 ring-primary' : '',
+        "max-w-xl",
+        "max-h-[60vh]"
       )}
       style={
         !isFullscreen 
           ? {
               left: `${position.x}px`,
               top: `${position.y}px`,
-              transform: 'none'
+              transform: 'none' // Remove the transform if using absolute positioning
             }
-          : {
-              left: 0,
-              top: 0,
-              transform: 'none'
-            }
+          : undefined
       }
       onClick={onClick}
     >
