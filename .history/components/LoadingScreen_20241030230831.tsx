@@ -71,7 +71,7 @@ export function LoadingScreen() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-background cursor-pointer"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background cursor-pointer"
       onClick={() => setIsComplete(true)}
     >
       <div className="w-[600px] space-y-8 text-center">

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, FolderGames2, ChevronUp, Volume2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
-import { Clock } from "./Clock";
+import { Clock } from "./C;
 import { useTheme } from "next-themes";
 import { TaskbarIcon } from "./TaskbarIcon";
 
@@ -100,7 +100,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
     <>
       <div 
         className="fixed bottom-0 left-0 right-0 h-12 bg-background border-t" 
-        style={{ zIndex: 50 }}
+        style={{ zIndex: 99999 }}
       >
         <div className="flex items-center justify-between h-full px-2">
           {/* Left Section - Weather */}

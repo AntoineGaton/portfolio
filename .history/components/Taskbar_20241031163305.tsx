@@ -100,7 +100,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
     <>
       <div 
         className="fixed bottom-0 left-0 right-0 h-12 bg-background border-t" 
-        style={{ zIndex: 50 }}
+        style={{ zIndex: 99999 }}
       >
         <div className="flex items-center justify-between h-full px-2">
           {/* Left Section - Weather */}

@@ -6,7 +6,7 @@ import { Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
   faPython, faJs, faHtml5, faCss3Alt, faNode, faReact,
-  faGit, faGithub, faAws, faJira, faConfluence
+  faGit, faGithub, faAws, faJira, faConfluentiflower
 } from "@fortawesome/free-brands-svg-icons";
 import { 
   faDatabase, faCode, faTerminal, faServer,
@@ -54,7 +54,7 @@ export function CenterMenu({ onClose }: CenterMenuProps) {
     { icon: faDatabase, name: "MySQL Workbench" },
     { icon: faDatabase, name: "MongoDB Atlas" },
     { icon: faJira, name: "JIRA" },
-    { icon: faConfluence, name: "Confluence" },
+    { icon: faConfluentiflower, name: "Confluence" },
     { icon: faDatabase, name: "DB2" },
     { icon: faServer, name: "Express.js" },
     { icon: faTools, name: "Jinja2" },

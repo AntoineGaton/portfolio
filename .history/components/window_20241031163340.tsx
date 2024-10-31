@@ -27,6 +27,7 @@ import { cn } from "@/lib/utils";
  * @property {number} initialPosition - Initial position of the window
  * @property {boolean} isFullscreen - Whether window is in fullscreen mode
  * @property {string} id - Window ID
+ * @property {string} className - Window class name
  */
 interface WindowProps {
   id: string;
@@ -45,6 +46,7 @@ interface WindowProps {
     height?: string;
   };
   isFullscreen?: boolean;
+  className?: string;
 }
 
 /**
