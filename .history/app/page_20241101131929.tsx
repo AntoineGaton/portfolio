@@ -32,7 +32,6 @@ export default function Home() {
     );
   };
   
-  // Loading screen
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -47,6 +46,7 @@ export default function Home() {
   
   return (
     <main className="min-h-screen">
+      {/* <LoadingScreen /> */}
       <Background />
       <Desktop />
       <Taskbar 

@@ -17,11 +17,10 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 // import { MobileLayout } from "@/components/MobileLayout";
 import { Taskbar } from "@/components/Taskbar";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [isLoading, setIsLoading] = useState(true);
   const [openWindows, setOpenWindows] = useState<Array<{ id: string; isMinimized: boolean }>>([]);
 
   const handleWindowRestore = (id: string) => {
@@ -31,22 +30,11 @@ export default function Home() {
       )
     );
   };
-  
-  // Loading screen
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000); // Show loading screen for 2 seconds
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
-  
   return (
     <main className="min-h-screen">
+      
+      <LoadingScreen />
       <Background />
       <Desktop />
       <Taskbar 

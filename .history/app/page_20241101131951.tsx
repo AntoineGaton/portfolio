@@ -32,7 +32,7 @@ export default function Home() {
     );
   };
   
-  // Loading screen
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
