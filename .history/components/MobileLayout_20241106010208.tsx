@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, LayoutGrid } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, LayoutGrid, Battery, Signal, Wifi } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 
@@ -23,6 +23,26 @@ interface AppIcon {
 export const MobileLayout = () => {
   const [openApp, setOpenApp] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [time, setTime] = useState(() => new Date().toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit',
+    hour12: true 
+  }));
+
+  const [signalStrength, setSignalStrength] = useState(Math.floor(Math.random() * 3)); // 0-2
+  const [wifiStrength, setWifiStrength] = useState(Math.floor(Math.random() * 3)); // 0-2
+  const [batteryLevel, setBatteryLevel] = useState(Math.floor(Math.random() * 3)); // 0-2
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date().toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const apps: AppIcon[] = [
     { id: "about", icon: User2, label: "About Me", component: AboutContent },
@@ -47,7 +67,31 @@ export const MobileLayout = () => {
   const CurrentComponent = openApp ? apps.find(app => app.id === openApp)?.component : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 dark:from-gray-900 dark:to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 dark:from-gray-900 dark:to-gray-800">
+      <div className="sticky top-0 z-50 flex justify-between items-center px-4 py-2 bg-background/80 backdrop-blur-sm">
+        <span className="font-medium">{time}</span>
+        <div className="flex items-center gap-2">
+          <Signal 
+            className={cn("w-4 h-4", 
+              signalStrength === 0 && "opacity-30",
+              signalStrength === 1 && "opacity-60"
+            )} 
+          />
+          <Wifi 
+            className={cn("w-4 h-4", 
+              wifiStrength === 0 && "opacity-30",
+              wifiStrength === 1 && "opacity-60"
+            )} 
+          />
+          <Battery 
+            className={cn("w-4 h-4", 
+              batteryLevel === 0 && "text-red-500",
+              batteryLevel === 1 && "text-yellow-500",
+              batteryLevel === 2 && "text-green-500"
+            )} 
+          />
+        </div>
+      </div>
       {!openApp ? (
         <div className="grid grid-cols-4 gap-4 pt-12">
           {apps.map((app) => {
@@ -96,7 +140,25 @@ export const MobileLayout = () => {
         </div>
       )}
 
-      {/* iOS-style home indicator */}
+      {/* Add dock at the bottom */}
+      <div className="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md h-16 bg-white/20 dark:bg-gray-800/20 backdrop-blur-md rounded-3xl border border-white/30 dark:border-white/10 shadow-lg flex items-center justify-around px-4">
+        {apps.slice(0, 4).map((app) => {
+          const Icon = app.icon;
+          return (
+            <button
+              key={app.id}
+              className="flex flex-col items-center gap-1 hover:scale-110 transition-transform"
+              onClick={() => handleAppClick(app.id)}
+            >
+              <div className="w-12 h-12 rounded-2xl bg-white/90 dark:bg-gray-800/90 flex items-center justify-center shadow-sm">
+                <Icon className="w-6 h-6 text-primary" />
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Home indicator */}
       <div className="fixed bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/20 dark:bg-white/20 rounded-full" />
     </div>
   );

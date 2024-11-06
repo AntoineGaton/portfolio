@@ -1,15 +1,16 @@
 "use client";
+
 import { useState } from "react";
-import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, LayoutGrid } from "lucide-react";
+import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, Apps } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 
 // Dynamically import content components
-const AboutContent = dynamic(() => import("./window-contents/AboutContent").then(mod => ({ default: mod.AboutContent })));
-const ProjectsContent = dynamic(() => import("./window-contents/ProjectsContent").then(mod => ({ default: mod.ProjectsContent })));
-const ExperienceContent = dynamic(() => import("./window-contents/ExperienceContent").then(mod => ({ default: mod.ExperienceContent })));
-const ResumeContent = dynamic(() => import("./window-contents/ResumeContent").then(mod => ({ default: mod.ResumeContent })));
-const ContactContent = dynamic(() => import("./window-contents/ContactContent").then(mod => ({ default: mod.ContactContent })));
+const AboutContent = dynamic(() => import("./window-contents/AboutContent"));
+const ProjectsContent = dynamic(() => import("./window-contents/ProjectsContent"));
+const ExperienceContent = dynamic(() => import("./window-contents/ExperienceContent"));
+const ResumeContent = dynamic(() => import("./window-contents/ResumeContent"));
+const ContactContent = dynamic(() => import("./window-contents/ContactContent"));
 const GamesContent = dynamic(() => import("./window-contents/GamesContent").then(mod => ({ default: mod.GamesContent })));
 const AppsContent = dynamic(() => import("./window-contents/AppsContent").then(mod => ({ default: mod.AppsContent })));
 
@@ -20,7 +21,7 @@ interface AppIcon {
   component: React.ComponentType;
 }
 
-export const MobileLayout = () => {
+export function MobileLayout() {
   const [openApp, setOpenApp] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -31,7 +32,7 @@ export const MobileLayout = () => {
     { id: "resume", icon: FileText, label: "Resume", component: ResumeContent },
     { id: "contact", icon: Mail, label: "Contact", component: ContactContent },
     { id: "games", icon: Gamepad2, label: "Games", component: GamesContent },
-    { id: "apps", icon: LayoutGrid, label: "Apps", component: AppsContent }
+    { id: "apps", icon: Apps, label: "Apps", component: AppsContent }
   ];
 
   const handleAppClick = (id: string) => {

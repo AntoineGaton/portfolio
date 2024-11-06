@@ -1,6 +1,6 @@
 "use client";
-import { useState } from "react";
-import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, LayoutGrid } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, LayoutGrid, Battery, Signal, Wifi } from "lucide-react";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
 
@@ -23,6 +23,22 @@ interface AppIcon {
 export const MobileLayout = () => {
   const [openApp, setOpenApp] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [time, setTime] = useState(() => new Date().toLocaleTimeString('en-US', { 
+    hour: 'numeric', 
+    minute: '2-digit',
+    hour12: true 
+  }));
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date().toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const apps: AppIcon[] = [
     { id: "about", icon: User2, label: "About Me", component: AboutContent },
@@ -47,7 +63,15 @@ export const MobileLayout = () => {
   const CurrentComponent = openApp ? apps.find(app => app.id === openApp)?.component : null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 dark:from-gray-900 dark:to-gray-800 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-sky-200 dark:from-gray-900 dark:to-gray-800">
+      <div className="sticky top-0 z-50 flex justify-between items-center px-4 py-2 bg-background/80 backdrop-blur-sm">
+        <span className="font-medium">{time}</span>
+        <div className="flex items-center gap-2">
+          <Signal className="w-4 h-4" />
+          <Wifi className="w-4 h-4" />
+          <Battery className="w-4 h-4" />
+        </div>
+      </div>
       {!openApp ? (
         <div className="grid grid-cols-4 gap-4 pt-12">
           {apps.map((app) => {

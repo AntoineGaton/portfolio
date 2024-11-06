@@ -31,7 +31,7 @@ export const MobileLayout = () => {
     { id: "resume", icon: FileText, label: "Resume", component: ResumeContent },
     { id: "contact", icon: Mail, label: "Contact", component: ContactContent },
     { id: "games", icon: Gamepad2, label: "Games", component: GamesContent },
-    { id: "apps", icon: LayoutGrid, label: "Apps", component: AppsContent }
+    { id: "apps", icon: Apps, label: "Apps", component: AppsContent }
   ];
 
   const handleAppClick = (id: string) => {
