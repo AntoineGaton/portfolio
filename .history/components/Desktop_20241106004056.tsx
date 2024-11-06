@@ -18,12 +18,10 @@ import { ContactContent } from "./window-contents/ContactContent";
  * @interface WindowState
  * @property {string} id - Unique identifier for the window
  * @property {boolean} isMinimized - Current minimize state
- * @property {number} zIndex - Current z-index for the window
  */
 interface WindowState {
   id: string;
   isMinimized: boolean;
-  zIndex: number;
 }
 
 /**
@@ -58,7 +56,6 @@ const calculateNextPosition = (index: number) => {
 export function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
   const [activeWindow, setActiveWindow] = useState<string | null>(null);
-  const [maxZIndex, setMaxZIndex] = useState(0);
 
   const desktopIcons: DesktopIcon[] = [
     { id: "about", icon: User2, label: "About Me" },
@@ -75,23 +72,25 @@ export function Desktop() {
     const existingWindow = openWindows.find(window => window.id === id);
     
     if (existingWindow) {
-      // Update z-index and minimize state for existing window
-      setMaxZIndex(prev => prev + 1);
-      setOpenWindows(prev => prev.map(window => 
-        window.id === id 
-          ? { ...window, isMinimized: false, zIndex: maxZIndex + 1 }
-          : window
-      ));
+      // If window exists but is minimized, restore it
+      if (existingWindow.isMinimized) {
+        setOpenWindows(prev =>
+          prev.map(w =>
+            w.id === id ? { ...w, isMinimized: false } : w
+          )
+        );
+      }
+      // Bring window to front by moving it to the end of the array
+      setOpenWindows(prev => [
+        ...prev.filter(w => w.id !== id),
+        { ...existingWindow, isMinimized: false }
+      ]);
+      setActiveWindow(id);
     } else {
-      // Create new window with highest z-index
-      setMaxZIndex(prev => prev + 1);
-      setOpenWindows(prev => [...prev, { 
-        id, 
-        isMinimized: false, 
-        zIndex: maxZIndex + 1 
-      }]);
+      // Create new window
+      setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
+      setActiveWindow(id);
     }
-    setActiveWindow(id);
   };
 
   return (
@@ -107,28 +106,21 @@ export function Desktop() {
         ))}
       </div>
 
-      {openWindows.map((window) => (
+      {openWindows.map((window, index) => (
         <Window
           key={window.id}
           id={window.id}
-          title={window.id.charAt(0).toUpperCase() + window.id.slice(1)}
+          title={window.id === "about" ? "About Me" : window.id.charAt(0).toUpperCase() + window.id.slice(1)}
           isActive={window.id === activeWindow}
           isMinimized={window.isMinimized}
+          isFullscreen={window.id === "portfolio"}
           onClose={() => {
             setOpenWindows(prev => prev.filter(w => w.id !== window.id));
             if (activeWindow === window.id) {
               setActiveWindow(null);
             }
           }}
-          onClick={() => {
-            setMaxZIndex(prev => prev + 1);
-            setOpenWindows(prev => prev.map(w => 
-              w.id === window.id 
-                ? { ...w, zIndex: maxZIndex + 1 }
-                : w
-            ));
-            setActiveWindow(window.id);
-          }}
+          onClick={() => setActiveWindow(window.id)}
           onMinimize={() => {
             setOpenWindows(prev =>
               prev.map(w =>
@@ -136,7 +128,14 @@ export function Desktop() {
               )
             );
           }}
-          windowIndex={window.zIndex}
+          windowIndex={openWindows.length - index}
+          initialPosition={
+            window.id === "about" ? 
+              { x: 50, y: 50, width: '1000px', height: '800px' } :
+            window.id === "portfolio" ? 
+              { x: 0, y: 0, width: '100vw', height: '100vh' } : 
+              calculateNextPosition(openWindows.indexOf(window))
+          }
         >
           {/* Window Contents */}
           {window.id === "about" && <AboutContent />}
