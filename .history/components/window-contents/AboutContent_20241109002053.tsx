@@ -12,33 +12,24 @@ import {
 import { faCode, faDatabase, faNetworkWired } from '@fortawesome/free-solid-svg-icons'
 import { Card, CardContent, CardTitle, CardHeader } from "../ui/card"
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
-interface TimelineItem {
-  title: string
-  date: string
-  description: string
-}
-
-export function AboutContent() {
-  const [isMaximized, setIsMaximized] = useState(false)
-  
-  const timelineItems: TimelineItem[] = [
-    {
-      title: "Owner and Lead Developer at Code Monkey Studios",
-      date: "2024 - Present",
-      description: "Owner and lead developer of Code Monkey Studios, specializing in custom software solutions, client websites, and app development. Managed end-to-end project delivery, from requirements gathering to deployment, for clients in diverse industries, ensuring high-quality, client-focused outcomes.",
-    },
-    {
-      title: "Software Engineer at TD Bank",
-      date: "2022 - 2024",
-      description: "Worked on anti-money laundering (AML) projects and implemented backend solutions for financial services. Contributed to cross-functional projects, collaborated with stakeholders to enhance user experience, and ensured code quality and security compliance in a regulated environment.",
-    },
-    {
-      title: "Teaching Assistant at Coding Dojo",
-      date: "2020 - 2024",
-      description: "Supported students in learning web development, data structures, and algorithms. Provided one-on-one assistance, developed coding exercises, and helped students debug projects in JavaScript, Python, and other languages to reinforce foundational programming skills.",
-    },
-  ]
+/**
+ * AboutContent Component
+ * Displays personal information and skills
+ * @component
+ */
+export default function AboutContent() {
+  /**
+   * Skills categorization
+   * @type {Record<string, string[]>}
+   */
+  const skills = {
+    "Frontend": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    "Backend": ["Node.js", "Python", "PostgreSQL", "MongoDB"],
+    "Tools": ["Git", "Docker", "AWS", "Figma"],
+    "Other": ["Agile", "CI/CD", "Testing", "Performance Optimization"]
+  };
 
   return (
     <div>

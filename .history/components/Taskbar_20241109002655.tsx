@@ -186,7 +186,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
   return (
     <>
       <div 
-        className="fixed bottom-0 left-0 right-0 h-12 bg-background border-t border-black-500/30"
+        className="fixed bottom-0 left-0 right-0 h-12 bg-[#000428] border-t border-black-500/30"
         style={{ zIndex: 50 }}
       >
         <div className="flex items-center justify-between h-full px-2">

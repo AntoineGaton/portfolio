@@ -214,7 +214,7 @@ export function Window({
         top: `${position.y}px`,
         width: isFullscreen ? '100vw' : `${size.width}px`,
         height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
-        zIndex: isActive ? 50 : windowIndex
+        zIndex: windowIndex
       }}
       onClick={onClick}
       onMouseDown={startDrag}

@@ -55,7 +55,6 @@ const calculateNextPosition = (index: number) => {
  */
 export function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
-  const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
 
   const desktopIcons: DesktopIcon[] = [
     { id: "about", icon: User2, label: "About Me" },
@@ -72,13 +71,6 @@ export function Desktop() {
   const handleIconClick = (id: string) => {
     if (!openWindows.find(window => window.id === id)) {
       setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
-      setActiveWindowId(id);
-    } else {
-      // Window exists, bring it to front and unminimize if needed
-      setOpenWindows(prev => prev.map(window => 
-        window.id === id ? { ...window, isMinimized: false } : window
-      ));
-      setActiveWindowId(id);
     }
   };
 
@@ -100,16 +92,11 @@ export function Desktop() {
           key={window.id}
           id={window.id}
           title={window.id === "about" ? "About Me" : window.id.charAt(0).toUpperCase() + window.id.slice(1)}
-          isActive={activeWindowId === window.id}
+          isActive={true}
           isMinimized={window.isMinimized}
           isFullscreen={window.id === "portfolio"}
-          onClose={() => {
-            setOpenWindows(prev => prev.filter(w => w.id !== window.id));
-            if (activeWindowId === window.id) {
-              setActiveWindowId(null);
-            }
-          }}
-          onClick={() => setActiveWindowId(window.id)}
+          onClose={() => setOpenWindows(prev => prev.filter(w => w.id !== window.id))}
+          onClick={() => {}}
           onMinimize={() => {
             setOpenWindows(prev =>
               prev.map(w =>

@@ -19,6 +19,16 @@ interface TimelineItem {
   description: string
 }
 
+interface SkillIcon {
+  icon: any;
+  label: string;
+}
+
+interface SkillCardProps {
+  title: string;
+  skills: string;
+}
+
 export function AboutContent() {
   const [isMaximized, setIsMaximized] = useState(false)
   

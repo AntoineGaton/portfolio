@@ -73,12 +73,6 @@ export function Desktop() {
     if (!openWindows.find(window => window.id === id)) {
       setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
       setActiveWindowId(id);
-    } else {
-      // Window exists, bring it to front and unminimize if needed
-      setOpenWindows(prev => prev.map(window => 
-        window.id === id ? { ...window, isMinimized: false } : window
-      ));
-      setActiveWindowId(id);
     }
   };
 

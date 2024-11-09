@@ -61,7 +61,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col">
-      <LoadingScreen onComplete={() => setIsLoading(false)} />
+      <LoadingScreen />
       <Background />
       <div className="flex-1 relative">
         <Desktop />

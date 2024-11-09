@@ -7,11 +7,6 @@ import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Globe, Lu
 import { GamesContent } from "./window-contents/GamesContent";
 import { AppsContent } from "./window-contents/AppsContent";
 import { PortfolioContent } from "./window-contents/PortfolioContent";
-import { ResumeContent } from "./window-contents/ResumeContent";
-import { AboutContent } from "./window-contents/AboutContent";
-import { ContactContent } from "./window-contents/ContactContent";
-import { ExperienceContent } from "./window-contents/ExperienceContent";
-import { ProjectsContent } from "./window-contents/ProjectsContent";
 
 /**
  * Window State Interface
@@ -55,7 +50,6 @@ const calculateNextPosition = (index: number) => {
  */
 export function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
-  const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
 
   const desktopIcons: DesktopIcon[] = [
     { id: "about", icon: User2, label: "About Me" },
@@ -72,13 +66,6 @@ export function Desktop() {
   const handleIconClick = (id: string) => {
     if (!openWindows.find(window => window.id === id)) {
       setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
-      setActiveWindowId(id);
-    } else {
-      // Window exists, bring it to front and unminimize if needed
-      setOpenWindows(prev => prev.map(window => 
-        window.id === id ? { ...window, isMinimized: false } : window
-      ));
-      setActiveWindowId(id);
     }
   };
 
@@ -100,16 +87,11 @@ export function Desktop() {
           key={window.id}
           id={window.id}
           title={window.id === "about" ? "About Me" : window.id.charAt(0).toUpperCase() + window.id.slice(1)}
-          isActive={activeWindowId === window.id}
+          isActive={true}
           isMinimized={window.isMinimized}
           isFullscreen={window.id === "portfolio"}
-          onClose={() => {
-            setOpenWindows(prev => prev.filter(w => w.id !== window.id));
-            if (activeWindowId === window.id) {
-              setActiveWindowId(null);
-            }
-          }}
-          onClick={() => setActiveWindowId(window.id)}
+          onClose={() => setOpenWindows(prev => prev.filter(w => w.id !== window.id))}
+          onClick={() => {}}
           onMinimize={() => {
             setOpenWindows(prev =>
               prev.map(w =>
@@ -127,11 +109,6 @@ export function Desktop() {
           }
         >
           {window.id === "portfolio" && <PortfolioContent />}
-          {window.id === "about" && <AboutContent />}
-          {window.id === "projects" && <ProjectsContent />}
-          {window.id === "experience" && <ExperienceContent />}
-          {window.id === "resume" && <ResumeContent />}
-          {window.id === "contact" && <ContactContent />}
           {window.id === "games" && <GamesContent />}
           {window.id === "apps" && <AppsContent />}
           {window.id === "portfolio" && <PortfolioContent />}
