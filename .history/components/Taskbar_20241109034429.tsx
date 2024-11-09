@@ -262,19 +262,11 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => {
-                const event = new CustomEvent('openWindow', { 
-                  detail: { 
-                    windowId: 'resume',
-                    makeActive: true 
-                  },
-                  bubbles: true,
-                  cancelable: true
-                });
-                window.dispatchEvent(event);
-              }}
+              asChild
             >
-              <FileText className="h-5 w-5" />
+              <a href="/documents/Antoine_Gaton_Resume_11824.pdf" download>
+                <FileText className="h-5 w-5" />
+              </a>
             </Button>
 
             <Button 

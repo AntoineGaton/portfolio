@@ -10,7 +10,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Minus, Maximize2, Minimize2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion, useAnimation } from "framer-motion";
 
 /**
  * Window Props Interface
@@ -36,7 +35,6 @@ interface WindowProps {
   onClose: () => void;
   onClick: () => void;
   onMinimize: () => void;
-  onMinimizeComplete?: () => void;
   windowIndex: number;
   initialPosition?: {
     x: number;
@@ -53,12 +51,10 @@ const minimizeVariants = {
   open: {
     scale: 1,
     opacity: 1,
-    x: 0,
-    y: 0,
     transition: { duration: 0.2, ease: "easeOut" }
   },
   minimized: (target: { x: number; y: number }) => ({
-    scale: 0.5,
+    scale: 0,
     opacity: 0,
     x: target.x,
     y: target.y,
@@ -72,7 +68,6 @@ const minimizeVariants = {
  * @component
  */
 export function Window({
-  id,
   title,
   children,
   isActive,
@@ -80,7 +75,6 @@ export function Window({
   onClose,
   onClick,
   onMinimize,
-  onMinimizeComplete,
   windowIndex,
   defaultIsFullscreen = false
 }: WindowProps) {
@@ -230,104 +224,92 @@ export function Window({
   }
 
   return (
-    <motion.div
-      initial={false}
-      animate={isMinimized ? "minimized" : "open"}
-      variants={minimizeVariants}
-      custom={getMinimizeTarget(id, position)}
-      onAnimationComplete={() => {
-        if (isMinimized && onMinimizeComplete) {
-          onMinimizeComplete();
-        }
+    <Card
+      ref={windowRef}
+      className={cn(
+        "fixed bg-background border rounded-lg shadow-lg overflow-hidden select-none",
+        isMinimized && "hidden",
+        isActive ? 'shadow-xl ring-2 ring-primary' : ''
+      )}
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        width: isFullscreen ? '100vw' : `${size.width}px`,
+        height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
+        zIndex: isActive ? 50 : windowIndex
       }}
-      style={{ position: 'fixed', zIndex: isActive ? 50 : windowIndex }}
+      onClick={onClick}
+      onMouseDown={startDrag}
     >
-      <Card
-        ref={windowRef}
-        className={cn(
-          "fixed bg-background border rounded-lg shadow-lg overflow-hidden select-none",
-          isActive ? 'shadow-xl ring-2 ring-primary' : ''
-        )}
-        style={{
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          width: isFullscreen ? '100vw' : `${size.width}px`,
-          height: isFullscreen ? `calc(100vh - 48px)` : `${size.height}px`,
-          zIndex: isActive ? 50 : windowIndex
-        }}
-        onClick={onClick}
+      {/* Window Title Bar */}
+      <div
+        className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move window-title-bar"
         onMouseDown={startDrag}
+        onDoubleClick={handleFullscreen}
       >
-        {/* Window Title Bar */}
-        <div
-          className="h-10 bg-background border-b flex items-center justify-between px-4 cursor-move window-title-bar"
-          onMouseDown={startDrag}
-          onDoubleClick={handleFullscreen}
-        >
-          <span className="font-medium">{title}</span>
-          <div className="flex items-center gap-2">
-            {/* Window Controls */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMinimize();
-              }}
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleFullscreen();
-              }}
-            >
-              {isFullscreen ? (
-                <Minimize2 className="h-4 w-4" />
-              ) : (
-                <Maximize2 className="h-4 w-4" />
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-6 w-6"
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
+        <span className="font-medium">{title}</span>
+        <div className="flex items-center gap-2">
+          {/* Window Controls */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation();
+              onMinimize();
+            }}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleFullscreen();
+            }}
+          >
+            {isFullscreen ? (
+              <Minimize2 className="h-4 w-4" />
+            ) : (
+              <Maximize2 className="h-4 w-4" />
+            )}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-6 w-6"
+            onClick={(e) => {
+              e.stopPropagation();
+              onClose();
+            }}
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
+      </div>
 
-        {/* Resize handles */}
-        {!isFullscreen && (
-          <>
-            <div className="absolute inset-0 pointer-events-none border border-transparent" />
-            <div className="absolute top-0 left-0 w-3 h-full cursor-w-resize hover:bg-primary/10" onMouseDown={startResize('w')} />
-            <div className="absolute top-0 right-0 w-3 h-full cursor-e-resize hover:bg-primary/10" onMouseDown={startResize('e')} />
-            <div className="absolute top-0 left-0 h-3 w-full cursor-n-resize hover:bg-primary/10" onMouseDown={startResize('n')} />
-            <div className="absolute bottom-0 left-0 h-3 w-full cursor-s-resize hover:bg-primary/10" onMouseDown={startResize('s')} />
-            <div className="absolute top-0 left-0 w-5 h-5 cursor-nw-resize hover:bg-primary/10" onMouseDown={startResize('nw')} />
-            <div className="absolute top-0 right-0 w-5 h-5 cursor-ne-resize hover:bg-primary/10" onMouseDown={startResize('ne')} />
-            <div className="absolute bottom-0 left-0 w-5 h-5 cursor-sw-resize hover:bg-primary/10" onMouseDown={startResize('sw')} />
-            <div className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize hover:bg-primary/10" onMouseDown={startResize('se')} />
-          </>
-        )}
+      {/* Resize handles */}
+      {!isFullscreen && (
+        <>
+          <div className="absolute inset-0 pointer-events-none border border-transparent" />
+          <div className="absolute top-0 left-0 w-3 h-full cursor-w-resize hover:bg-primary/10" onMouseDown={startResize('w')} />
+          <div className="absolute top-0 right-0 w-3 h-full cursor-e-resize hover:bg-primary/10" onMouseDown={startResize('e')} />
+          <div className="absolute top-0 left-0 h-3 w-full cursor-n-resize hover:bg-primary/10" onMouseDown={startResize('n')} />
+          <div className="absolute bottom-0 left-0 h-3 w-full cursor-s-resize hover:bg-primary/10" onMouseDown={startResize('s')} />
+          <div className="absolute top-0 left-0 w-5 h-5 cursor-nw-resize hover:bg-primary/10" onMouseDown={startResize('nw')} />
+          <div className="absolute top-0 right-0 w-5 h-5 cursor-ne-resize hover:bg-primary/10" onMouseDown={startResize('ne')} />
+          <div className="absolute bottom-0 left-0 w-5 h-5 cursor-sw-resize hover:bg-primary/10" onMouseDown={startResize('sw')} />
+          <div className="absolute bottom-0 right-0 w-5 h-5 cursor-se-resize hover:bg-primary/10" onMouseDown={startResize('se')} />
+        </>
+      )}
 
-        {/* Window Content */}
-        <div className="p-4 h-[calc(100%-2.5rem)] overflow-auto">
-          {children}
-        </div>
-      </Card>
-    </motion.div>
+      {/* Window Content */}
+      <div className="p-4 h-[calc(100%-2.5rem)] overflow-auto">
+        {children}
+      </div>
+    </Card>
   );
 }
 
@@ -353,19 +335,4 @@ const calculateNextPosition = (windowIndex: number) => {
   ));
   
   return { x, y };
-};
-
-const getMinimizeTarget = (id: string, position: { x: number; y: number }) => {
-  const taskbarIcon = document.querySelector(`[data-window-id="${id}"]`);
-  if (taskbarIcon) {
-    const rect = taskbarIcon.getBoundingClientRect();
-    return {
-      x: rect.left - position.x,
-      y: window.innerHeight - position.y
-    };
-  }
-  return {
-    x: window.innerWidth / 2 - position.x,
-    y: window.innerHeight - position.y
-  };
 };

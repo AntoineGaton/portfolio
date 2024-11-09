@@ -36,7 +36,6 @@ interface WindowProps {
   onClose: () => void;
   onClick: () => void;
   onMinimize: () => void;
-  onMinimizeComplete?: () => void;
   windowIndex: number;
   initialPosition?: {
     x: number;
@@ -53,12 +52,10 @@ const minimizeVariants = {
   open: {
     scale: 1,
     opacity: 1,
-    x: 0,
-    y: 0,
     transition: { duration: 0.2, ease: "easeOut" }
   },
   minimized: (target: { x: number; y: number }) => ({
-    scale: 0.5,
+    scale: 0,
     opacity: 0,
     x: target.x,
     y: target.y,
@@ -72,7 +69,6 @@ const minimizeVariants = {
  * @component
  */
 export function Window({
-  id,
   title,
   children,
   isActive,
@@ -80,7 +76,6 @@ export function Window({
   onClose,
   onClick,
   onMinimize,
-  onMinimizeComplete,
   windowIndex,
   defaultIsFullscreen = false
 }: WindowProps) {
@@ -231,16 +226,19 @@ export function Window({
 
   return (
     <motion.div
-      initial={false}
+      initial="open"
       animate={isMinimized ? "minimized" : "open"}
       variants={minimizeVariants}
       custom={getMinimizeTarget(id, position)}
       onAnimationComplete={() => {
-        if (isMinimized && onMinimizeComplete) {
-          onMinimizeComplete();
+        if (isMinimized) {
+          // Trigger taskbar icon creation if needed
+          const event = new CustomEvent('windowMinimized', {
+            detail: { windowId: id }
+          });
+          window.dispatchEvent(event);
         }
       }}
-      style={{ position: 'fixed', zIndex: isActive ? 50 : windowIndex }}
     >
       <Card
         ref={windowRef}

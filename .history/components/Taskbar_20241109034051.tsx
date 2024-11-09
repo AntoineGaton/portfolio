@@ -13,12 +13,10 @@ import { BatteryLow, BatteryMedium, BatteryCharging } from "lucide-react";
  * @interface TaskbarProps
  * @property {Array<{id: string, isMinimized: boolean}>} openWindows - Currently open windows
  * @property {(id: string) => void} onWindowRestore - Handler for restoring minimized windows
- * @property {(id: string) => void} onWindowOpen - Handler for opening new windows
  */
 interface TaskbarProps {
   openWindows: Array<{ id: string; isMinimized: boolean }>;
   onWindowRestore: (id: string) => void;
-  onWindowOpen: (id: string) => void;
 }
 
 /**
@@ -37,7 +35,7 @@ interface WeatherState {
  * Provides system-wide controls and window management
  * @component
  */
-export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: TaskbarProps) {
+export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
   // State management
   const [centerMenuOpen, setCenterMenuOpen] = useState(false);
   const [weather, setWeather] = useState<WeatherState | null>(null);
@@ -244,37 +242,21 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => {
-                const event = new CustomEvent('openWindow', { 
-                  detail: { 
-                    windowId: 'contact',
-                    makeActive: true 
-                  },
-                  bubbles: true,
-                  cancelable: true
-                });
-                window.dispatchEvent(event);
-              }}
+              asChild
             >
-              <Mail className="h-5 w-5" />
+              <a href="mailto:swe.antoine.gaton@gmail.com">
+                <Mail className="h-5 w-5" />
+              </a>
             </Button>
 
             <Button 
               variant="ghost" 
               size="icon"
-              onClick={() => {
-                const event = new CustomEvent('openWindow', { 
-                  detail: { 
-                    windowId: 'resume',
-                    makeActive: true 
-                  },
-                  bubbles: true,
-                  cancelable: true
-                });
-                window.dispatchEvent(event);
-              }}
+              asChild
             >
-              <FileText className="h-5 w-5" />
+              <a href="/documents/Antoine_Gaton_Resume_11824.pdf" download>
+                <FileText className="h-5 w-5" />
+              </a>
             </Button>
 
             <Button 

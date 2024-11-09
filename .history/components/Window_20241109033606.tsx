@@ -36,7 +36,6 @@ interface WindowProps {
   onClose: () => void;
   onClick: () => void;
   onMinimize: () => void;
-  onMinimizeComplete?: () => void;
   windowIndex: number;
   initialPosition?: {
     x: number;
@@ -80,7 +79,6 @@ export function Window({
   onClose,
   onClick,
   onMinimize,
-  onMinimizeComplete,
   windowIndex,
   defaultIsFullscreen = false
 }: WindowProps) {
@@ -235,11 +233,6 @@ export function Window({
       animate={isMinimized ? "minimized" : "open"}
       variants={minimizeVariants}
       custom={getMinimizeTarget(id, position)}
-      onAnimationComplete={() => {
-        if (isMinimized && onMinimizeComplete) {
-          onMinimizeComplete();
-        }
-      }}
       style={{ position: 'fixed', zIndex: isActive ? 50 : windowIndex }}
     >
       <Card

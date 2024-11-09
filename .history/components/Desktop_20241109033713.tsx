@@ -99,13 +99,6 @@ export function Desktop() {
     }
   };
 
-  const handleMinimize = (id: string) => {
-    setOpenWindows(prev => prev.map(window => 
-      window.id === id ? { ...window, isMinimized: true } : window
-    ));
-    setActiveWindowId(null);
-  };
-
   useEffect(() => {
     const handleOpenWindow = (event: CustomEvent<{ windowId: string, makeActive: boolean }>) => {
       const { windowId, makeActive } = event.detail;
@@ -169,7 +162,10 @@ export function Desktop() {
               }
             }}
             onClick={() => setActiveWindowId(window.id)}
-            onMinimize={() => handleMinimize(window.id)}
+            onMinimize={() => {
+              console.log('Minimizing window:', window.id); // Debug log
+              setMinimizedWindows(prev => [...prev, window.id]);
+            }}
             onMinimizeComplete={() => {
               // Any additional actions after minimize animation completes
             }}
