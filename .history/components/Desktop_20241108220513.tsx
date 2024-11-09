@@ -68,7 +68,7 @@ export function Desktop() {
 
   return (
     <div className="fixed inset-0 bottom-12">
-      <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,100px)] gap-1 p-1 h-full">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-1 p-1 h-full">
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}

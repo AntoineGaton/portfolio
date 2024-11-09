@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { DesktopIcon } from "./DesktopIcon";
 import { Window } from "./Window";
-import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Chrome, LucideIcon, LayoutGrid } from "lucide-react";
+import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Chrome, LucideIcon } from "lucide-react";
 import { GamesContent } from "./window-contents/GamesContent";
 import { AppsContent } from "./window-contents/AppsContent";
 import { PortfolioContent } from "./window-contents/PortfolioContent";
@@ -56,7 +56,7 @@ export function Desktop() {
     { id: "resume", icon: FileText, label: "Resume" },
     { id: "contact", icon: Mail, label: "Contact" },
     { id: "games", icon: Gamepad2, label: "Games" },
-    { id: "apps", icon: LayoutGrid, label: "Apps" },
+    { id: "apps", icon: Apps, label: "Apps" },
     { id: "portfolio", icon: Chrome, label: "Portfolio" },
   ];
 
@@ -68,7 +68,7 @@ export function Desktop() {
 
   return (
     <div className="fixed inset-0 bottom-12">
-      <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,100px)] gap-1 p-1 h-full">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-1 p-1 h-full">
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
