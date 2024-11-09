@@ -76,5 +76,8 @@
     "typescript": "5.2.2",
     "vaul": "^0.9.0",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@shadcn/ui": "^0.0.4"
   }
 }

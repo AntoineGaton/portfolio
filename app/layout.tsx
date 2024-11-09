@@ -1,8 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Cursor } from '@/components/cursor';
+import { ThemeProvider } from '@/components/ThemeProvider';
 // import { WeatherDrawer } from '@/components/WeatherDrawer';
 
 const inter = Inter({ subsets: ['latin'] });
