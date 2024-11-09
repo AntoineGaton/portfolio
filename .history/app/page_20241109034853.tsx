@@ -35,10 +35,6 @@ export default function Home() {
     );
   };
 
-  const handleWindowOpen = (id: string) => {
-    setOpenWindows(windows => [...windows, { id, isMinimized: false }]);
-  };
-
   const handleFullScreen = () => {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen().catch((err) => {
@@ -74,7 +70,6 @@ export default function Home() {
       <Taskbar 
         openWindows={openWindows}
         onWindowRestore={handleWindowRestore}
-        onWindowOpen={handleWindowOpen}
       />
     </main>
   );

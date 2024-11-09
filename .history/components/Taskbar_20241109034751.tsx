@@ -59,7 +59,6 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
       case "resume": return FileText;
       case "contact": return Mail;
       case "games": return Gamepad2;
-      case "terminal": return Terminal;
       case "app": return AppWindow;
       default: return Monitor;
     }
