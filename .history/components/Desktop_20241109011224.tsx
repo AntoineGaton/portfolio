@@ -86,20 +86,21 @@ export function Desktop() {
     const handleOpenWindow = (event: CustomEvent<{ windowId: string, makeActive: boolean }>) => {
       const { windowId, makeActive } = event.detail;
       
-      // Update windows state and set active window in a single batch
+      // First update windows state
       setOpenWindows(prev => {
         const windowExists = prev.find(window => window.id === windowId);
         if (!windowExists) {
-          // If window doesn't exist, add it
-          setTimeout(() => setActiveWindowId(windowId), 0); // Ensure this runs after state update
           return [...prev, { id: windowId, isMinimized: false }];
         }
-        // If window exists, unminimize it
-        setTimeout(() => setActiveWindowId(windowId), 0); // Ensure this runs after state update
         return prev.map(window => 
           window.id === windowId ? { ...window, isMinimized: false } : window
         );
       });
+      
+      // Set active window immediately if makeActive is true
+      if (makeActive) {
+        setActiveWindowId(windowId);
+      }
     };
 
     window.addEventListener('openWindow', handleOpenWindow as EventListener);

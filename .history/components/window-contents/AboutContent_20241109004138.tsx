@@ -12,7 +12,6 @@ import {
 import { faCode, faDatabase, faNetworkWired } from '@fortawesome/free-solid-svg-icons'
 import { Card, CardContent, CardTitle, CardHeader } from "../ui/card"
 import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 
 interface TimelineItem {
   title: string
@@ -32,7 +31,7 @@ export function AboutContent() {
     {
       title: "Software Engineer at TD Bank",
       date: "2022 - 2024",
-      description: "Developed backend solutions for the First Home Savings Account (FHSA), Investment Account (INVA), and tax reports associated with interest and income from non-registered investment accounts. Played a key role in cross-functional projects, collaborating closely with stakeholders to improve user experience. Ensured code quality, security, and compliance within a regulated financial environment.",
+      description: "Worked on anti-money laundering (AML) projects and implemented backend solutions for financial services. Contributed to cross-functional projects, collaborated with stakeholders to enhance user experience, and ensured code quality and security compliance in a regulated environment.",
     },
     {
       title: "Teaching Assistant at Coding Dojo",
@@ -54,8 +53,7 @@ export function AboutContent() {
     Frontend: [
       "React.js",
       "Next.js",
-      "Three.js",
-      "Electron",
+      "Redux",
       "Tailwind CSS",
       "Material UI",
       "Bootstrap",
@@ -70,14 +68,13 @@ export function AboutContent() {
     ],
     Tools: [
       "Git",
-      "JIRA",
-      "Confluence",
-      "Postman",
-      "MySQL Workbench",
-      "MongoDB Atlas",
-      "VSCode",
-      "Jupyter Notebook",
-      "Selenium",
+      "AWS",
+      "Docker",
+      "Jenkins",
+      "MongoDB",
+      "PostgreSQL",
+      "MySQL",
+      "Linux/Unix",
     ],
   };
 
@@ -88,7 +85,7 @@ export function AboutContent() {
         <div className="flex justify-center">
           <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-gray-700 shadow-lg">
             <Image
-              src="/images/Antoine01.jpg"
+              src="/images/Antoine.jpg"
               alt="Antoine Gaton"
               layout="fill"
               objectFit="cover"
@@ -107,48 +104,16 @@ export function AboutContent() {
           </p>
           
           {/* Social Links */}
-          <div className="mt-6 flex justify-center gap-4">
-            <Link
-              href="https://github.com/AntoineGaton"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full p-2 transition-colors hover:bg-muted"
-            >
-              <Github className="h-6 w-6" />
-              <span className="sr-only">GitHub Profile</span>
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/antoine-gaton/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full p-2 transition-colors hover:bg-muted"
-            >
-              <Linkedin className="h-6 w-6" />
-              <span className="sr-only">LinkedIn Profile</span>
-            </Link>
-            <button
-              onClick={async () => {
-                if (typeof window !== 'undefined') {
-                  try {
-                    const event = new CustomEvent('openWindow', { 
-                      detail: { 
-                        windowId: 'contact',
-                        makeActive: true 
-                      },
-                      bubbles: true,  // Add this to ensure event bubbling
-                      cancelable: true // Add this to make event cancelable
-                    });
-                    window.dispatchEvent(event);
-                  } catch (error) {
-                    console.error('Error opening contact window:', error);
-                  }
-                }
-              }}
-              className="rounded-full p-2 transition-colors hover:bg-muted"
-            >
-              <Mail className="h-6 w-6" />
-              <span className="sr-only">Contact Form</span>
-            </button>
+          <div className="flex justify-center space-x-4">
+            <a href="https://github.com/AntoineGaton" className="text-gray-400 hover:text-white transition-colors" aria-label="GitHub">
+              <Github className="w-6 h-6" />
+            </a>
+            <a href="https://www.linkedin.com/in/antoine-gaton/" className="text-gray-400 hover:text-white transition-colors" aria-label="LinkedIn">
+              <Linkedin className="w-6 h-6" />
+            </a>
+            <a href="mailto:swe.antoine.gaton@gmail.com" className="text-gray-400 hover:text-white transition-colors" aria-label="Email">
+              <Mail className="w-6 h-6" />
+            </a>
           </div>
         </div>
 
@@ -219,8 +184,6 @@ export function AboutContent() {
           <a
             href="/documents/Antoine_Gaton_Resume_110924.pdf"
             download="Antoine_Gaton_Resume_110924.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             <Download className="w-5 h-5 mr-2" />

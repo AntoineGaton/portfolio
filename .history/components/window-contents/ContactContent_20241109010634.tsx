@@ -203,7 +203,7 @@ export function ContactContent() {
               <Image
                 src="/images/Antoine02.jpg"
                 alt="Profile picture"
-                layout="fill"
+                ayout="fill"
                 objectFit="cover"
                 className="rounded-full"
               />

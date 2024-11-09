@@ -203,9 +203,9 @@ export function ContactContent() {
               <Image
                 src="/images/Antoine02.jpg"
                 alt="Profile picture"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
+                ayout="fill"
+              objectFit="cover"
+              className="rounded-full"
               />
             </div>
             <h2 className="text-2xl font-semibold mb-2">Antoine Gaton</h2>

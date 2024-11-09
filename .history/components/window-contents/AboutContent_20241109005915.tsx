@@ -88,7 +88,7 @@ export function AboutContent() {
         <div className="flex justify-center">
           <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-gray-700 shadow-lg">
             <Image
-              src="/images/Antoine01.jpg"
+              src="/images/Antoine.jpg"
               alt="Antoine Gaton"
               layout="fill"
               objectFit="cover"
@@ -127,21 +127,15 @@ export function AboutContent() {
               <span className="sr-only">LinkedIn Profile</span>
             </Link>
             <button
-              onClick={async () => {
+              onClick={() => {
                 if (typeof window !== 'undefined') {
-                  try {
+                  const handleIconClick = (id: string) => {
                     const event = new CustomEvent('openWindow', { 
-                      detail: { 
-                        windowId: 'contact',
-                        makeActive: true 
-                      },
-                      bubbles: true,  // Add this to ensure event bubbling
-                      cancelable: true // Add this to make event cancelable
+                      detail: { windowId: 'contact' } 
                     });
                     window.dispatchEvent(event);
-                  } catch (error) {
-                    console.error('Error opening contact window:', error);
-                  }
+                  };
+                  handleIconClick('contact');
                 }
               }}
               className="rounded-full p-2 transition-colors hover:bg-muted"
