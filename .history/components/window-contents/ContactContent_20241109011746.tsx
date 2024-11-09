@@ -201,11 +201,12 @@ export function ContactContent() {
           <div className="text-center">
             <div className="relative w-32 h-32 mx-auto mb-6 rounded-full overflow-hidden ring-2 ring-primary/20">
               <Image
-                src="/images/AntoineAI.jpg"
+                src="/images/Antoine02.jpg"
                 alt="Profile picture"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
+                width={150}
+                height={150}
+                className="rounded-full object-cover object-center"
+                style={{ transform: 'scale(0.8)' }}
               />
             </div>
             <h2 className="text-2xl font-semibold mb-2">Antoine Gaton</h2>

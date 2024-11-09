@@ -52,6 +52,21 @@ export function PortfolioContent() {
               onMouseEnter={() => setHoveredItems(prev => ({ ...prev, third: true }))}
               onMouseLeave={() => setHoveredItems(prev => ({ ...prev, third: false }))}
               style={{
+                color: hoveredItems.second ? 'transparent' : 'white',
+                WebkitBackgroundClip: hoveredItems.second ? 'text' : 'unset',
+                backgroundClip: hoveredItems.second ? 'text' : 'unset',
+                backgroundImage: hoveredItems.second ? 'linear-gradient(90deg, #ff0000, #00ff00, #0000ff)' : 'none',
+                backgroundSize: '300% 100%',
+                animation: hoveredItems.second ? 'rgb-text 2s infinite linear' : 'none'
+              }}
+            >
+              {hoveredItems.second ? 'Experience' : 'Antoine'}
+            </h2>
+            <h3 
+              className="text-4xl md:text-6xl lg:text-8xl font-bold cursor-pointer transition-all duration-300"
+              onMouseEnter={() => setHoveredItems(prev => ({ ...prev, third: true }))}
+              onMouseLeave={() => setHoveredItems(prev => ({ ...prev, third: false }))}
+              style={{
                 color: hoveredItems.third ? 'transparent' : 'white',
                 WebkitBackgroundClip: hoveredItems.third ? 'text' : 'unset',
                 backgroundClip: hoveredItems.third ? 'text' : 'unset',
@@ -60,22 +75,7 @@ export function PortfolioContent() {
                 animation: hoveredItems.third ? 'rgb-text 2s infinite linear' : 'none'
               }}
             >
-              {hoveredItems.third ? 'Experience' : 'Antoine'}
-            </h2>
-            <h3 
-              className="text-4xl md:text-6xl lg:text-8xl font-bold cursor-pointer transition-all duration-300"
-              onMouseEnter={() => setHoveredItems(prev => ({ ...prev, fourth: true }))}
-              onMouseLeave={() => setHoveredItems(prev => ({ ...prev, fourth: false }))}
-              style={{
-                color: hoveredItems.fourth ? 'transparent' : 'white',
-                WebkitBackgroundClip: hoveredItems.fourth ? 'text' : 'unset',
-                backgroundClip: hoveredItems.fourth ? 'text' : 'unset',
-                backgroundImage: hoveredItems.fourth ? 'linear-gradient(90deg, #ff0000, #00ff00, #0000ff)' : 'none',
-                backgroundSize: '300% 100%',
-                animation: hoveredItems.fourth ? 'rgb-text 2s infinite linear' : 'none'
-              }}
-            >
-              {hoveredItems.fourth ? 'Contact' : 'Gaton'}
+              {hoveredItems.third ? 'Contact' : 'Gaton'}
             </h3>
           </div>
         </div>

@@ -98,35 +98,6 @@ export function Desktop() {
     }
   };
 
-  useEffect(() => {
-    const handleOpenWindow = (event: CustomEvent<{ windowId: string, makeActive: boolean }>) => {
-      const { windowId, makeActive } = event.detail;
-      
-      // Check if window exists
-      const existingWindow = openWindows.find(window => window.id === windowId);
-      
-      if (!existingWindow) {
-        // Create new window
-        setOpenWindows(prev => [...prev, { id: windowId, isMinimized: false }]);
-      } else {
-        // Update existing window
-        setOpenWindows(prev => prev.map(window => 
-          window.id === windowId ? { ...window, isMinimized: false } : window
-        ));
-      }
-      
-      // Set active window with a slight delay to ensure state is updated
-      setTimeout(() => {
-        setActiveWindowId(windowId);
-      }, 0);
-    };
-
-    window.addEventListener('openWindow', handleOpenWindow as EventListener);
-    return () => {
-      window.removeEventListener('openWindow', handleOpenWindow as EventListener);
-    };
-  }, [openWindows]); // Add openWindows as dependency
-
   return (
     <div className="fixed inset-0 bottom-12">
       <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,100px)] gap-1 p-1 h-full">
