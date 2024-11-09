@@ -7,11 +7,11 @@ import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Globe, Lu
 import { GamesContent } from "./window-contents/GamesContent";
 import { AppsContent } from "./window-contents/AppsContent";
 import { PortfolioContent } from "./window-contents/PortfolioContent";
-import { AboutContent } from "./window-contents/AboutContent";
-import { ProjectsContent } from "./window-contents/ProjectsContent";
-import { ExperienceContent } from "./window-contents/ExperienceContent";
 import { ResumeContent } from "./window-contents/ResumeContent";
+import { AboutContent } from "./window-contents/AboutContent";
 import { ContactContent } from "./window-contents/ContactContent";
+import { ExperienceContent } from "./window-contents/ExperienceContent";
+import { ProjectsContent } from "./window-contents/ProjectsContent";
 
 /**
  * Window State Interface
@@ -75,8 +75,8 @@ export function Desktop() {
   };
 
   return (
-    <div className="min-h-screen p-4">
-      <div className="grid grid-cols-1 gap-4">
+    <div className="fixed inset-0 bottom-12">
+      <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,100px)] gap-1 p-1 h-full">
         {desktopIcons.map((icon) => (
           <DesktopIcon
             key={icon.id}
@@ -113,7 +113,7 @@ export function Desktop() {
               calculateNextPosition(openWindows.indexOf(window))
           }
         >
-          {/* Window Contents */}
+          {window.id === "portfolio" && <PortfolioContent />}
           {window.id === "about" && <AboutContent />}
           {window.id === "projects" && <ProjectsContent />}
           {window.id === "experience" && <ExperienceContent />}

@@ -18,6 +18,8 @@ import { LoadingScreen } from "@/components/LoadingScreen";
 import { Taskbar } from "@/components/Taskbar";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { useState, useEffect } from "react";
+import { Maximize } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -31,24 +33,39 @@ export default function Home() {
       )
     );
   };
-  
-  // Loading screen
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 8000); // Show loading screen for 8 seconds
 
-    return () => clearTimeout(timer);
+  const handleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch((err) => {
+        console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+      });
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      // F11 key or Cmd/Ctrl + Enter
+      if (e.key === 'F11' || ((e.metaKey || e.ctrlKey) && e.key === 'Enter')) {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+          });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
   }, []);
 
-  if (isLoading) {
-    return <LoadingScreen onComplete={() => setIsLoading(false)} />;
-  }
-  
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen flex flex-col">
+      <LoadingScreen />
       <Background />
-      <Desktop />
+      <div className="flex-1 relative">
+        <Desktop />
+      </div>
       <Taskbar 
         openWindows={openWindows}
         onWindowRestore={handleWindowRestore}

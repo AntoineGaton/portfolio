@@ -1,0 +1,117 @@
+{
+    // ===== Editor Appearance =====
+    "workbench.colorTheme": "GitHub Dark Default",
+    "workbench.iconTheme": "eq-material-theme-icons-darker",
+    "workbench.activityBar.location": "hidden",
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "all",
+    "editor.wordWrap": "on",
+    "editor.tabSize": 3,
+    "explorer.compactFolders": false,
+
+    // ===== Editor Behavior =====
+    "editor.suggestSelection": "first",
+    "editor.inlineSuggest.enabled": true,
+    "files.autoSave": "afterDelay",
+    "security.workspace.trust.untrustedFiles": "open",
+    "powermode.enabled": true,
+
+    // ===== Code Formatting =====
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+    },
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml"
+    },
+    "[python]": {
+        "editor.formatOnType": true
+    },
+
+    // ===== Git Configuration =====
+    "git.enableSmartCommit": true,
+    "git.autofetch": true,
+    "git.confirmSync": false,
+
+    // ===== Terminal Settings =====
+    "terminal.integrated.defaultProfile.windows": "Cmder",
+    "terminal.integrated.profiles.windows": {
+        "Cmder": {
+            "path": "${env:windir}\\System32\\cmd.exe",
+            "args": ["/k", "C:\\cmder\\vendor\\bin\\vscode_init.cmd"]
+        }
+    },
+    "terminal.integrated.env.windows": {},
+
+    // ===== Language Specific =====
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "emmet.includeLanguages": {
+        "razor": "html",
+        "html": "html",
+        "aspnetcorerazor": "html"
+    },
+    "svelte.enable-ts-plugin": true,
+
+    // ===== Spell Checker =====
+    "cSpell.enabled": false,
+    "cSpell.ignoreWords": ["bloginfo"],
+    "cSpell.userWords": ["Mobi"],
+
+    // ===== AI and Intellisense =====
+    "tabnine.experimentalAutoImports": true,
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "github.copilot.enable": {
+        "*": true,
+        "COBOL": true,
+        "COBOLIT": true,
+        "ACUCOBOL": true,
+        "COBOL_MF_LISTFILE": false,
+        "COBOL_PCOB_LISTFILE": false,
+        "COBOL_ACU_LISTFILE": false,
+        "COBOL_MF_PREP": false,
+        "mfu": false,
+        "utreport": false
+    },
+
+    // ===== File Associations =====
+    "workbench.editorAssociations": {
+        "*.pdf": "cweijan.officeViewer"
+    },
+    "files.associations": {
+        "*.COBOL*": "cobol",
+        "*.COB*": "cobol",
+        "*.COBCOPY*": "cobol",
+        "*.COPYBOOK*": "cobol",
+        "*.COPY*": "cobol"
+        // ... (other file associations remain the same)
+    },
+
+    // ===== LaTeX Configuration =====
+    "latex-workshop.latex.autoBuild.run": "onSave",
+    "latex-workshop.latex.clean.enabled": true,
+    "latex-workshop.latex.autoClean.run": "onBuilt",
+    "latex-workshop.latex.clean.fileTypes": [
+        "*.aux",
+        "*.bbl",
+        "*.blg",
+        // ... (other file types remain the same)
+    ],
+
+    // ===== Miscellaneous =====
+    "liveServer.settings.donotShowInfoMsg": true,
+    "npm.keybindingsChangedWarningShown": true,
+    "redhat.telemetry.enabled": true,
+    "arduino.useArduinoCli": true,
+    "chatgpt.lang": "en",
+    "code-runner.runInTerminal": true,
+    "cmake.configureOnOpen": false,
+    "console-ninja.featureSet": "Community"
+} 

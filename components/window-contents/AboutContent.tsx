@@ -49,6 +49,24 @@ export function AboutContent() {
       description: "Supported students in learning web development, data structures, and algorithms. Provided one-on-one assistance, developed coding exercises, and helped students debug projects in JavaScript, Python, and other languages to reinforce foundational programming skills.",
     },
   ]
+import Image from "next/image";
+
+/**
+ * AboutContent Component
+ * Displays personal information and skills
+ * @component
+ */
+export function AboutContent() {
+  /**
+   * Skills categorization
+   * @type {Record<string, string[]>}
+   */
+  const skills = {
+    "Frontend": ["React", "Next.js", "TypeScript", "Tailwind CSS"],
+    "Backend": ["Node.js", "Python", "PostgreSQL", "MongoDB"],
+    "Tools": ["Git", "Docker", "AWS", "Figma"],
+    "Other": ["Agile", "CI/CD", "Testing", "Performance Optimization"]
+  };
 
   return (
     <div>
