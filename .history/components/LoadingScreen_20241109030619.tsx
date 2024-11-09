@@ -73,7 +73,7 @@ const Windows95Design = ({ text }: { text: string }) => (
     </div>
     <div className="p-4 bg-black font-['MS_Sans_Serif']">
       <p className="text-left">
-        <span className="text-gray-200">C:\WINDOWS&gt;</span>
+        <span className="text-gray-200">C:\WINDOWS></span>
         <span className="text-gray-200">{text}</span>
         <span className="animate-pulse text-gray-200">_</span>
       </p>
@@ -96,9 +96,175 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
     <div className="p-6 font-mono">
       <p className="text-left">
         <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
+        <span className="text-[#7DBEFF]"> ~/portfolio</span>
+        <span className="text-[#E4E4E4]"> git:(</span>
+        <span className="text-[#FF8F40]">main</span>
         <span className="text-[#E4E4E4]">) {text}</span>
         <span className="animate-pulse text-[#E4E4E4]">▋</span>
+      </p>
+    </div>
+  </div>
+);
+
+const MainframeDesign = ({ text }: { text: string }) => (
+  <div className="mx-auto max-w-[500px] font-mono">
+    <div className="bg-black border-2 border-green-500 p-6 rounded">
+      <div className="mb-4 flex items-center justify-between border-b border-green-500/30 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 bg-green-500 animate-pulse"></div>
+          <span className="text-green-500 text-xs">IBM 3270</span>
+        </div>
+        <div className="text-green-500 text-xs">READY</div>
+      </div>
+      <div className="space-y-1">
+        <div className="grid grid-cols-8 gap-1 mb-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="text-[10px] text-green-500/50"
+            >{`F${i + 1}`}</div>
+          ))}
+        </div>
+        <p className="text-green-500 uppercase tracking-wide">
+          TSO/E LOGON IN PROGRESS
+        </p>
+        <p className="text-green-500">
+          <span className="mr-2">&gt;</span>
+          {text}
+          <span className="animate-pulse">█</span>
+        </p>
+      </div>
+      <div className="mt-4 pt-2 border-t border-green-500/30 flex justify-between text-[10px] text-green-500/50">
+        <span>SYSTEM ONLINE</span>
+        <span>3270 TERMINAL</span>
+      </div>
+    </div>
+  </div>
+);
+
+const LinuxTerminalDesign = ({ text }: { text: string }) => (
+  <div className="mx-auto max-w-[500px] rounded-lg overflow-hidden bg-[#300A24] shadow-xl">
+    <div className="bg-[#3A2837] px-4 py-2 flex items-center justify-between">
+      <div className="flex items-center gap-2">
+        <div className="flex gap-1.5">
+          <div className="h-3 w-3 rounded-full bg-[#FF605C] hover:bg-[#FF605C]/80 cursor-pointer"></div>
+          <div className="h-3 w-3 rounded-full bg-[#FFBD44] hover:bg-[#FFBD44]/80 cursor-pointer"></div>
+          <div className="h-3 w-3 rounded-full bg-[#00CA4E] hover:bg-[#00CA4E]/80 cursor-pointer"></div>
+        </div>
+        <span className="text-gray-300 text-sm">Terminal</span>
+      </div>
+    </div>
+    <div className="p-6 font-mono bg-[#300A24]">
+      <p className="text-left mb-1">
+        <span className="text-green-400">antoine@ubuntu</span>
+        <span className="text-gray-400">:</span>
+        <span className="text-blue-400">~/portfolio</span>
+        <span className="text-gray-400">$</span>
+        <span className="text-gray-200"> neofetch</span>
+      </p>
+      <div className="flex gap-4 mt-2">
+        <div className="text-[#E95420] whitespace-pre font-mono text-xs leading-[1.2]">
+          {`                           .-/+oossssoo+/-.
+                       ´:+ssssssssssssssssss+:\`
+                     -+ssssssssssssssssssyyssss+-
+                   .ossssssssssssssssss dMMMNysssso.
+                  /sssssssssss hdm ssss dMMMMNsssssss/
+                 +sssssssss hNMMM y ss dMMMMNssssssss+
+                /ssssssss hNMMMMMMNmmds dMMMMNsssssssss/
+               .ssssssss hNMMMMMMMMMMMMs dMMMNssssssssss.
+               +ssss hNMMMMMMMMMMMMMMMs dMMMNsssssssssss+
+               sss mMMMMMMMMMMMMMMMMMs dMMMNssssssssssss
+               sss MMMMMMMMMMMMMMMMMMM NMMMdssssssssssss
+               sss MMMMMMMMMMMMMMMMMMM NMMMdssssssssssss`}`}
+        </div>
+        <div className="text-gray-300 space-y-0.5">
+          <p className="text-left">
+            <span className="text-[#E95420] font-bold mr-2">antoine@ubuntu</span>
+            <span className="text-gray-500">-----------------</span>
+          </p>
+          <p className="text-left">
+            <span className="text-gray-500 mr-2">OS:</span>
+            Ubuntu 22.04.3 LTS x86_64
+          </p>
+          <p className="text-left">
+            <span className="text-gray-500 mr-2">Shell:</span>
+            bash 5.1.16
+          </p>
+          <p className="text-left">
+            <span className="text-gray-500 mr-2">Terminal:</span>
+            gnome-terminal
+          </p>
+          <p className="text-left text-gray-200">
+            <span className="text-gray-500 mr-2">&gt;</span>
+            {text}
+            <span className="animate-pulse">█</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const MongoDBDesign = ({ text }: { text: string }) => (
+  <div className="mx-auto max-w-[600px] rounded-lg bg-[#1B1B1B] p-6 font-mono shadow-xl">
+    <div className="flex items-center gap-2 border-b border-emerald-500/20 pb-4 mb-4">
+      <div className="flex items-center gap-2">
+        <div className="h-3 w-3 rounded-full bg-emerald-500"></div>
+        <span className="text-emerald-500 text-sm">mongodb://localhost:27017/portfolio</span>
+      </div>
+    </div>
+    
+    <div className="space-y-2 text-sm">
+      <p className="text-gray-400">
+        <span className="text-emerald-400">></span> use portfolio
+      </p>
+      <p className="text-gray-400">
+        <span className="text-emerald-400">portfolio></span> db.antoine.findOne()
+      </p>
+      
+      <div className="bg-black/50 rounded-lg p-4 font-mono text-sm">
+        {`{
+  "_id": ObjectId("507f1f77bcf86cd799439011"),
+  "name": "Antoine Gaton",
+  "title": "Full Stack Developer",
+  "location": "France",
+  "skills": [
+    "JavaScript",
+    "TypeScript",
+    "React",
+    "Node.js",
+    "MongoDB",
+    "AWS"
+  ],
+  "roles": [
+    "Software Engineer",
+    "Entrepreneur",
+    "Husband",
+    "Brother",
+    "Son"
+  ],
+  "experience": {
+    "years": 5,
+    "companies": [
+      "Self-employed",
+      "Previous ventures"
+    ]
+  },
+  "education": {
+    "degree": "Computer Science",
+    "certifications": [
+      "AWS Certified",
+      "MongoDB Professional"
+    ]
+  },
+  "currentStatus": "${text}",
+  "lastUpdated": ISODate("${new Date().toISOString()}")
+}`}
+      </div>
+      
+      <p className="text-emerald-400 flex items-center gap-2">
+        <span className="animate-pulse">●</span>
+        <span>Connection is alive</span>
       </p>
     </div>
   </div>
@@ -109,31 +275,11 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [text, setText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Use useEffect to set the random design index after initial render
   const [designIndex, setDesignIndex] = useState(0);
 
-  const designs = [
-    {
-      component: <Windows95Design text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
-      bgColor: "bg-[#008080]",
-      textColor: "text-white"
-    },
-    {
-      component: <MacTerminalDesign text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
-      bgColor: "bg-[#2D2D2D]",
-      textColor: "text-[#E4E4E4]"
-    },
-    {
-      component: <MatrixDesign text={text} />,
-      icon: <Code className="h-20 w-20 text-emerald-400" />,
-      bgColor: "bg-black",
-      textColor: "text-emerald-400"
-    },
-  ];
-
   useEffect(() => {
-    setDesignIndex(Math.floor(Math.random() * designs.length));
+    setDesignIndex(Math.floor(Math.random() * 6));
   }, []);
 
   const roles = useMemo(() => [
@@ -205,6 +351,45 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   if (isComplete) return null;
   if (isLoading) return null; // Return null during initial load
+
+  const designs = [
+    {
+      component: <Windows95Design text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
+      bgColor: "bg-[#008080]",
+      textColor: "text-white"
+    },
+    {
+      component: <MacTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
+      bgColor: "bg-[#2D2D2D]",
+      textColor: "text-[#E4E4E4]"
+    },
+    {
+      component: <MatrixDesign text={text} />,
+      icon: <Code className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-black",
+      textColor: "text-emerald-400"
+    },
+    {
+      component: <MainframeDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-green-500" />,
+      bgColor: "bg-black",
+      textColor: "text-green-500"
+    },
+    {
+      component: <LinuxTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#E95420]" />,
+      bgColor: "bg-[#300A24]",
+      textColor: "text-gray-200"
+    },
+    {
+      component: <MongoDBDesign text={text} />,
+      icon: <Database className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-[#1B1B1B]",
+      textColor: "text-emerald-400"
+    }
+  ];
 
   const selectedDesign = designs[designIndex];
 

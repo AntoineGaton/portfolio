@@ -96,7 +96,7 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
     <div className="p-6 font-mono">
       <p className="text-left">
         <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
+        <span className="text-[#7DBEFF]"> ~/portfolio</span>
         <span className="text-[#E4E4E4]">) {text}</span>
         <span className="animate-pulse text-[#E4E4E4]">▋</span>
       </p>
@@ -105,12 +105,6 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
 );
 
 export function LoadingScreen({ onComplete }: LoadingScreenProps) {
-  const [isComplete, setIsComplete] = useState(false);
-  const [text, setText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [designIndex, setDesignIndex] = useState(0);
-
   const designs = [
     {
       component: <Windows95Design text={text} />,
@@ -131,6 +125,12 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
       textColor: "text-emerald-400"
     },
   ];
+
+  const [isComplete, setIsComplete] = useState(false);
+  const [text, setText] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [designIndex, setDesignIndex] = useState(0);
 
   useEffect(() => {
     setDesignIndex(Math.floor(Math.random() * designs.length));
@@ -205,6 +205,27 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   if (isComplete) return null;
   if (isLoading) return null; // Return null during initial load
+
+  const designs = [
+    {
+      component: <Windows95Design text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
+      bgColor: "bg-[#008080]",
+      textColor: "text-white"
+    },
+    {
+      component: <MacTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
+      bgColor: "bg-[#2D2D2D]",
+      textColor: "text-[#E4E4E4]"
+    },
+    {
+      component: <MatrixDesign text={text} />,
+      icon: <Code className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-black",
+      textColor: "text-emerald-400"
+    },
+  ];
 
   const selectedDesign = designs[designIndex];
 

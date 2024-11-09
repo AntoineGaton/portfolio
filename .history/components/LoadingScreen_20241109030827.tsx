@@ -73,7 +73,7 @@ const Windows95Design = ({ text }: { text: string }) => (
     </div>
     <div className="p-4 bg-black font-['MS_Sans_Serif']">
       <p className="text-left">
-        <span className="text-gray-200">C:\WINDOWS&gt;</span>
+        <span className="text-gray-200">C:\WINDOWS></span>
         <span className="text-gray-200">{text}</span>
         <span className="animate-pulse text-gray-200">_</span>
       </p>
@@ -96,7 +96,7 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
     <div className="p-6 font-mono">
       <p className="text-left">
         <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
+        <span className="text-[#7DBEFF]"> ~/portfolio</span>
         <span className="text-[#E4E4E4]">) {text}</span>
         <span className="animate-pulse text-[#E4E4E4]">▋</span>
       </p>
@@ -109,31 +109,11 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [text, setText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Use useEffect to set the random design index after initial render
   const [designIndex, setDesignIndex] = useState(0);
 
-  const designs = [
-    {
-      component: <Windows95Design text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
-      bgColor: "bg-[#008080]",
-      textColor: "text-white"
-    },
-    {
-      component: <MacTerminalDesign text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
-      bgColor: "bg-[#2D2D2D]",
-      textColor: "text-[#E4E4E4]"
-    },
-    {
-      component: <MatrixDesign text={text} />,
-      icon: <Code className="h-20 w-20 text-emerald-400" />,
-      bgColor: "bg-black",
-      textColor: "text-emerald-400"
-    },
-  ];
-
   useEffect(() => {
-    setDesignIndex(Math.floor(Math.random() * designs.length));
+    setDesignIndex(Math.floor(Math.random() * 6));
   }, []);
 
   const roles = useMemo(() => [
@@ -205,6 +185,45 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   if (isComplete) return null;
   if (isLoading) return null; // Return null during initial load
+
+  const designs = [
+    {
+      component: <Windows95Design text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
+      bgColor: "bg-[#008080]",
+      textColor: "text-white"
+    },
+    {
+      component: <MacTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
+      bgColor: "bg-[#2D2D2D]",
+      textColor: "text-[#E4E4E4]"
+    },
+    {
+      component: <MatrixDesign text={text} />,
+      icon: <Code className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-black",
+      textColor: "text-emerald-400"
+    },
+    {
+      component: <MainframeDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-green-500" />,
+      bgColor: "bg-black",
+      textColor: "text-green-500"
+    },
+    {
+      component: <LinuxTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#E95420]" />,
+      bgColor: "bg-[#300A24]",
+      textColor: "text-gray-200"
+    },
+    {
+      component: <MongoDBDesign text={text} />,
+      icon: <Database className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-[#1B1B1B]",
+      textColor: "text-emerald-400"
+    }
+  ];
 
   const selectedDesign = designs[designIndex];
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Terminal, SkipForward, Code, Laptop, Database } from "lucide-react";
+import { Terminal, SkipForward, Code, Laptop } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface LoadingScreenProps {
@@ -61,80 +61,13 @@ const MatrixDesign = ({ text }: { text: string }) => (
   </div>
 );
 
-const Windows95Design = ({ text }: { text: string }) => (
-  <div className="mx-auto max-w-[500px] rounded-sm border-2 shadow-[2px_2px_0px_0px_#000000] bg-[#c0c0c0]">
-    <div className="flex items-center justify-between bg-[#000080] px-2 py-1">
-      <span className="text-white text-sm font-bold">Command Prompt</span>
-      <div className="flex gap-1">
-        <button className="bg-[#c0c0c0] border-t-2 border-l-2 border-white border-b-2 border-r-2 border-black px-2 text-sm font-bold">_</button>
-        <button className="bg-[#c0c0c0] border-t-2 border-l-2 border-white border-b-2 border-r-2 border-black px-2 text-sm font-bold">□</button>
-        <button className="bg-[#c0c0c0] border-t-2 border-l-2 border-white border-b-2 border-r-2 border-black px-2 text-sm font-bold">×</button>
-      </div>
-    </div>
-    <div className="p-4 bg-black font-['MS_Sans_Serif']">
-      <p className="text-left">
-        <span className="text-gray-200">C:\WINDOWS&gt;</span>
-        <span className="text-gray-200">{text}</span>
-        <span className="animate-pulse text-gray-200">_</span>
-      </p>
-    </div>
-  </div>
-);
-
-const MacTerminalDesign = ({ text }: { text: string }) => (
-  <div className="mx-auto max-w-[500px] rounded-lg bg-[#2D2D2D] overflow-hidden shadow-xl">
-    <div className="bg-[#3A3A3A] px-4 py-2 flex items-center gap-2">
-      <div className="flex gap-2">
-        <div className="h-3 w-3 rounded-full bg-[#FF605C] border border-[#CE4A47] hover:opacity-80 cursor-pointer"></div>
-        <div className="h-3 w-3 rounded-full bg-[#FFBD44] border border-[#CD9A3A] hover:opacity-80 cursor-pointer"></div>
-        <div className="h-3 w-3 rounded-full bg-[#00CA4E] border border-[#0EA642] hover:opacity-80 cursor-pointer"></div>
-      </div>
-      <span className="text-[#ABABAB] text-xs ml-2 flex-1 text-center font-medium">
-        antoine@macbook-pro — -zsh — 80×24
-      </span>
-    </div>
-    <div className="p-6 font-mono">
-      <p className="text-left">
-        <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
-        <span className="text-[#E4E4E4]">) {text}</span>
-        <span className="animate-pulse text-[#E4E4E4]">▋</span>
-      </p>
-    </div>
-  </div>
-);
-
 export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [isComplete, setIsComplete] = useState(false);
   const [text, setText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [designIndex, setDesignIndex] = useState(0);
-
-  const designs = [
-    {
-      component: <Windows95Design text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
-      bgColor: "bg-[#008080]",
-      textColor: "text-white"
-    },
-    {
-      component: <MacTerminalDesign text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
-      bgColor: "bg-[#2D2D2D]",
-      textColor: "text-[#E4E4E4]"
-    },
-    {
-      component: <MatrixDesign text={text} />,
-      icon: <Code className="h-20 w-20 text-emerald-400" />,
-      bgColor: "bg-black",
-      textColor: "text-emerald-400"
-    },
-  ];
-
-  useEffect(() => {
-    setDesignIndex(Math.floor(Math.random() * designs.length));
-  }, []);
+  // Add design selector
+  const [designIndex] = useState(() => Math.floor(Math.random() * 3));
 
   const roles = useMemo(() => [
     "a son.",
@@ -191,20 +124,28 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
     return () => clearTimeout(timeout);
   }, [text, isDeleting, currentIndex, roles, isComplete]);
 
-  // Add a loading state to prevent initial render mismatch
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Short timeout to ensure hydration is complete
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 10);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   if (isComplete) return null;
-  if (isLoading) return null; // Return null during initial load
+
+  const designs = [
+    {
+      component: <TerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-green-500" />,
+      bgColor: "bg-black",
+      textColor: "text-green-500"
+    },
+    {
+      component: <CodeDesign text={text} />,
+      icon: <Laptop className="h-20 w-20 text-blue-400" />,
+      bgColor: "bg-zinc-950",
+      textColor: "text-blue-400"
+    },
+    {
+      component: <MatrixDesign text={text} />,
+      icon: <Code className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-black",
+      textColor: "text-emerald-400"
+    }
+  ];
 
   const selectedDesign = designs[designIndex];
 

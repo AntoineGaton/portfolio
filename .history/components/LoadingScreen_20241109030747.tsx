@@ -73,7 +73,7 @@ const Windows95Design = ({ text }: { text: string }) => (
     </div>
     <div className="p-4 bg-black font-['MS_Sans_Serif']">
       <p className="text-left">
-        <span className="text-gray-200">C:\WINDOWS&gt;</span>
+        <span className="text-gray-200">C:\WINDOWS></span>
         <span className="text-gray-200">{text}</span>
         <span className="animate-pulse text-gray-200">_</span>
       </p>
@@ -96,10 +96,48 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
     <div className="p-6 font-mono">
       <p className="text-left">
         <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
+        <span className="text-[#7DBEFF]"> ~/portfolio</span>
+        <span className="text-[#E4E4E4]"> git:(</span>
+        <span className="text-[#FF8F40]">main</span>
         <span className="text-[#E4E4E4]">) {text}</span>
         <span className="animate-pulse text-[#E4E4E4]">▋</span>
       </p>
+    </div>
+  </div>
+);
+
+const MainframeDesign = ({ text }: { text: string }) => (
+  <div className="mx-auto max-w-[500px] font-mono">
+    <div className="bg-black border-2 border-green-500 p-6 rounded">
+      <div className="mb-4 flex items-center justify-between border-b border-green-500/30 pb-2">
+        <div className="flex items-center gap-2">
+          <div className="h-3 w-3 bg-green-500 animate-pulse"></div>
+          <span className="text-green-500 text-xs">IBM 3270</span>
+        </div>
+        <div className="text-green-500 text-xs">READY</div>
+      </div>
+      <div className="space-y-1">
+        <div className="grid grid-cols-8 gap-1 mb-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="text-[10px] text-green-500/50"
+            >{`F${i + 1}`}</div>
+          ))}
+        </div>
+        <p className="text-green-500 uppercase tracking-wide">
+          TSO/E LOGON IN PROGRESS
+        </p>
+        <p className="text-green-500">
+          <span className="mr-2">&gt;</span>
+          {text}
+          <span className="animate-pulse">█</span>
+        </p>
+      </div>
+      <div className="mt-4 pt-2 border-t border-green-500/30 flex justify-between text-[10px] text-green-500/50">
+        <span>SYSTEM ONLINE</span>
+        <span>3270 TERMINAL</span>
+      </div>
     </div>
   </div>
 );
@@ -109,31 +147,11 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [text, setText] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  // Use useEffect to set the random design index after initial render
   const [designIndex, setDesignIndex] = useState(0);
 
-  const designs = [
-    {
-      component: <Windows95Design text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
-      bgColor: "bg-[#008080]",
-      textColor: "text-white"
-    },
-    {
-      component: <MacTerminalDesign text={text} />,
-      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
-      bgColor: "bg-[#2D2D2D]",
-      textColor: "text-[#E4E4E4]"
-    },
-    {
-      component: <MatrixDesign text={text} />,
-      icon: <Code className="h-20 w-20 text-emerald-400" />,
-      bgColor: "bg-black",
-      textColor: "text-emerald-400"
-    },
-  ];
-
   useEffect(() => {
-    setDesignIndex(Math.floor(Math.random() * designs.length));
+    setDesignIndex(Math.floor(Math.random() * 6));
   }, []);
 
   const roles = useMemo(() => [
@@ -205,6 +223,45 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
 
   if (isComplete) return null;
   if (isLoading) return null; // Return null during initial load
+
+  const designs = [
+    {
+      component: <Windows95Design text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#000080]" />,
+      bgColor: "bg-[#008080]",
+      textColor: "text-white"
+    },
+    {
+      component: <MacTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#78D95E]" />,
+      bgColor: "bg-[#2D2D2D]",
+      textColor: "text-[#E4E4E4]"
+    },
+    {
+      component: <MatrixDesign text={text} />,
+      icon: <Code className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-black",
+      textColor: "text-emerald-400"
+    },
+    {
+      component: <MainframeDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-green-500" />,
+      bgColor: "bg-black",
+      textColor: "text-green-500"
+    },
+    {
+      component: <LinuxTerminalDesign text={text} />,
+      icon: <Terminal className="h-20 w-20 text-[#E95420]" />,
+      bgColor: "bg-[#300A24]",
+      textColor: "text-gray-200"
+    },
+    {
+      component: <MongoDBDesign text={text} />,
+      icon: <Database className="h-20 w-20 text-emerald-400" />,
+      bgColor: "bg-[#1B1B1B]",
+      textColor: "text-emerald-400"
+    }
+  ];
 
   const selectedDesign = designs[designIndex];
 

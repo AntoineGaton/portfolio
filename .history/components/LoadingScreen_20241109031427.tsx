@@ -96,7 +96,7 @@ const MacTerminalDesign = ({ text }: { text: string }) => (
     <div className="p-6 font-mono">
       <p className="text-left">
         <span className="text-[#78D95E]">➜</span>
-        <span className="text-[#7DBEFF]"> ~/portfolio&gt;</span>
+        <span className="text-[#7DBEFF]"> ~/portfolio></span>
         <span className="text-[#E4E4E4]">) {text}</span>
         <span className="animate-pulse text-[#E4E4E4]">▋</span>
       </p>
