@@ -273,7 +273,7 @@ export function Window({
           <div className="flex items-center gap-2">
             {/* Window Controls */}
             <Button
-              variant="ghost"
+              variant={"ghost" as const}
               size="icon"
               className="h-6 w-6"
               onClick={(e) => {
@@ -284,7 +284,7 @@ export function Window({
               <Minus className="h-4 w-4" />
             </Button>
             <Button
-              variant={"ghost" as const}
+              variant="ghost"
               size="icon"
               className="h-6 w-6"
               onClick={(e) => {
@@ -299,7 +299,7 @@ export function Window({
               )}
             </Button>
             <Button
-              variant={"ghost" as const}
+              variant="ghost"
               size="icon"
               className="h-6 w-6"
               onClick={(e) => {

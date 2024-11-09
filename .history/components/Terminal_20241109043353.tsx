@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useRef, useEffect } from 'react';
-import { CodeMonkeyGame } from './CodeMonkeyGame';
 
 interface Command {
 input: string;
@@ -38,7 +37,6 @@ const [gameState, setGameState] = useState<GameState>({
 });
 const inputRef = useRef<HTMLInputElement>(null);
 const commandsEndRef = useRef<HTMLDivElement>(null);
-const gameRef = useRef<CodeMonkeyGame | null>(null);
 
 useEffect(() => {
    commandsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -184,6 +182,11 @@ const processCommand = (input: string): string => {
 
       case 'game':
         setIsGameMode(true);
+        setGameState({
+          currentScene: 'intro',
+          inventory: [],
+          stats: { coding: 1, creativity: 1, resilience: 1 }
+        });
         return `Welcome to "The Code Monkey's Path"!
 A text-based adventure game based on a true story.
 
@@ -199,17 +202,198 @@ Press Enter to begin your journey...`;
    }
 };
 
-const handleGameEnd = () => {
-  setIsGameMode(false);
-};
+const processGameCommand = (input: string): string => {
+  const command = input.toLowerCase().trim();
 
-const handleGameOutput = (output: string) => {
-  setCommands(prev => [...prev, {
-    input: currentInput,
-    output,
-    isJSMode: false,
-    isGameMode: true
-  }]);
+  if (command === 'quit') {
+    setIsGameMode(false);
+    return 'Thanks for playing!';
+  }
+
+  if (command === 'stats') {
+    return `Your Stats:
+Coding: ${gameState.stats.coding}
+Creativity: ${gameState.stats.creativity}
+Resilience: ${gameState.stats.resilience}`;
+  }
+
+  if (command === 'inventory') {
+    return gameState.inventory.length > 0 
+      ? `Your inventory: ${gameState.inventory.join(', ')}` 
+      : 'Your inventory is empty';
+  }
+
+  switch (gameState.currentScene) {
+    case 'intro':
+      if (command === 'look') {
+        return `The Bronx, NY - 1990s
+
+You find yourself in your childhood bedroom, surrounded by comics, books, and the soft glow of an old computer monitor. The streets outside are busy with the usual sounds of the city, but in here, you've created your own sanctuary.
+
+Options:
+1) Explore the computer
+2) Read some comics
+3) Look out the window`;
+      }
+      if (['1', 'explore computer', 'computer'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'computer',
+          stats: { ...prev.stats, coding: prev.stats.coding + 1 }
+        }));
+        return `You sit down at the old computer, its fan humming quietly. The screen flickers to life, showing a basic DOS prompt. Something about it captivates you...
+
+Your coding skill increased!
+
+Options:
+1) Try typing some commands
+2) Look through the programs
+3) Go back to exploring the room`;
+      }
+      if (['2', 'read comics', 'comics'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'comics',
+          stats: { ...prev.stats, creativity: prev.stats.creativity + 1 }
+        }));
+        return `You pick up some of your favorite comics. The pages are worn from countless readings, but the stories still captivate you. You see Watchmen, V for Vendetta, and various manga volumes.
+
+Your creativity increased!
+
+Options:
+1) Read Watchmen
+2) Read manga
+3) Put the comics away`;
+      }
+      if (['3', 'window', 'look window'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'window',
+          stats: { ...prev.stats, resilience: prev.stats.resilience + 1 }
+        }));
+        return `The bustling streets of the Bronx stretch out before you. Life isn't always easy here, but there's a vibrant energy that can't be denied. You watch people going about their lives, each with their own story.
+
+Your resilience increased!
+
+Options:
+1) People watch
+2) Think about the future
+3) Return to your room`;
+      }
+      return "Try looking around first with the 'look' command";
+
+    case 'computer':
+      if (command === 'look') {
+        return `The computer screen glows with possibility. You've spent countless hours here, learning and experimenting.
+
+Options:
+1) Try typing some commands
+2) Look through the programs
+3) Go back to exploring the room`;
+      }
+      if (['1', 'type', 'commands'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'coding',
+          stats: { ...prev.stats, coding: prev.stats.coding + 1 },
+          inventory: [...prev.inventory, 'Basic Programming Manual']
+        }));
+        return `You start typing commands, learning the basics of DOS. Something clicks in your mind - this feels right.
+
+You found: Basic Programming Manual
+Your coding skill increased!
+
+Options:
+1) Keep practicing
+2) Read the manual
+3) Return to your room`;
+      }
+      if (['3', 'back', 'return'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'intro'
+        }));
+        return `You step away from the computer, returning to your room.
+
+Type 'look' to see your surroundings again.`;
+      }
+      return "Try 'look' to see your options.";
+
+    case 'comics':
+      if (command === 'look') {
+        return `Your comic collection is spread out before you. Each volume represents a different world to explore.
+
+Options:
+1) Read Watchmen
+2) Read manga
+3) Put the comics away`;
+      }
+      if (['1', 'watchmen'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          stats: { ...prev.stats, creativity: prev.stats.creativity + 1 },
+          inventory: [...prev.inventory, 'Storytelling Insights']
+        }));
+        return `You lose yourself in the complex narrative of Watchmen. The intricate storytelling and moral ambiguity make you think deeply about design and structure.
+
+You gained: Storytelling Insights
+Your creativity increased!
+
+Options:
+1) Keep reading
+2) Think about the story
+3) Put it away`;
+      }
+      if (['3', 'away', 'put away'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'intro'
+        }));
+        return `You carefully put the comics away and return your attention to your room.
+
+Type 'look' to see your surroundings again.`;
+      }
+      return "Try 'look' to see your options.";
+
+    case 'window':
+      if (command === 'look') {
+        return `The city stretches out before you, a concrete jungle full of challenges and opportunities.
+
+Options:
+1) People watch
+2) Think about the future
+3) Return to your room`;
+      }
+      if (['2', 'think', 'future'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          stats: { ...prev.stats, resilience: prev.stats.resilience + 1 },
+          inventory: [...prev.inventory, 'Dreams & Ambitions']
+        }));
+        return `As you gaze out at the city, you dream about your future. Despite the challenges, you know technology could be your path to something greater.
+
+You gained: Dreams & Ambitions
+Your resilience increased!
+
+Options:
+1) Keep dreaming
+2) Make a plan
+3) Return to your room`;
+      }
+      if (['3', 'return', 'room'].includes(command)) {
+        setGameState(prev => ({
+          ...prev,
+          currentScene: 'intro'
+        }));
+        return `You step back from the window, returning your attention to your room.
+
+Type 'look' to see your surroundings again.`;
+      }
+      return "Try 'look' to see your options.";
+
+    default:
+      return "I don't understand that command.";
+  }
 };
 
 const handleSubmit = (e: React.FormEvent) => {
@@ -217,10 +401,13 @@ const handleSubmit = (e: React.FormEvent) => {
   if (!currentInput.trim()) return;
 
   if (isGameMode) {
-    if (gameRef.current) {
-      const output = gameRef.current.processGameCommand(currentInput);
-      handleGameOutput(output);
-    }
+    const output = processGameCommand(currentInput);
+    setCommands(prev => [...prev, { 
+      input: currentInput, 
+      output,
+      isJSMode: false,
+      isGameMode: true
+    }]);
   } else if (isJSMode) {
     try {
       // Create a function with all previous context
@@ -346,12 +533,6 @@ return (
          </form>
       </div>
       <div ref={commandsEndRef} />
-      {isGameMode && (
-        <CodeMonkeyGame
-          onGameEnd={handleGameEnd}
-          onGameOutput={handleGameOutput}
-        />
-      )}
       </div>
    </div>
 );
