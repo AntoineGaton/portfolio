@@ -1,6 +1,7 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiOff, WifiMedium } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiMedium, WifiOff } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";

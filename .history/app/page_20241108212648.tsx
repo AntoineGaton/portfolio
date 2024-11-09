@@ -62,6 +62,14 @@ export default function Home() {
     <main className="min-h-screen flex flex-col">
       <LoadingScreen />
       <Background />
+      <Button
+        variant="ghost"
+        size="icon"
+        className="fixed top-2 right-2 z-50"
+        onClick={handleFullScreen}
+      >
+        <Maximize className="h-4 w-4" />
+      </Button>
       <div className="flex-1 relative">
         <Desktop />
       </div>

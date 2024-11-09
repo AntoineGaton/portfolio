@@ -7,7 +7,6 @@ import { User2, Code2, Briefcase, FileText, Mail, Gamepad2, AppWindow, Globe, Lu
 import { GamesContent } from "./window-contents/GamesContent";
 import { AppsContent } from "./window-contents/AppsContent";
 import { PortfolioContent } from "./window-contents/PortfolioContent";
-import ResumeContent from "./window-contents/ResumeContent";
 
 /**
  * Window State Interface
@@ -103,7 +102,7 @@ export function Desktop() {
             calculateNextPosition(openWindows.indexOf(window))
           }
         >
-          {window.id === "resume" && <ResumeContent />}
+          
           {window.id === "portfolio" && <PortfolioContent />}
           {window.id === "games" && <GamesContent />}
           {window.id === "apps" && <AppsContent />}

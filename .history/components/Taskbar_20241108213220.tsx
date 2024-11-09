@@ -1,12 +1,12 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiOff, WifiMedium } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
 import { useTheme } from "next-themes";
 import { TaskbarIcon } from "./TaskbarIcon";
-import { BatteryLow, BatteryMedium, BatteryCharging } from "lucide-react";
 
 /**
  * Taskbar Props Interface
@@ -41,8 +41,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
   const [weather, setWeather] = useState<WeatherState | null>(null);
   const { theme, setTheme } = useTheme();
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [wifiStatus, setWifiStatus] = useState<'high' | 'medium' | 'low' | 'off'>('high');
-  const [batteryStatus, setBatteryStatus] = useState<'high' | 'medium' | 'low' | 'charging'>('high');
 
   /**
    * Maps window IDs to their corresponding icons
@@ -118,69 +116,6 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
       document.exitFullscreen().catch((err) => {
         console.log(`Error attempting to exit full-screen mode: ${err.message}`);
       });
-    }
-  };
-
-  // Function to get random status
-  const getRandomStatus = (type: 'wifi' | 'battery') => {
-    const statuses = type === 'wifi' 
-      ? ['high', 'medium', 'low', 'off'] 
-      : ['high', 'medium', 'low', 'charging'];
-    const randomIndex = Math.floor(Math.random() * statuses.length);
-    return statuses[randomIndex] as any;
-  };
-
-  // Effect to update statuses every 5 minutes
-  useEffect(() => {
-    // Set initial random states
-    setWifiStatus(getRandomStatus('wifi'));
-    setBatteryStatus(getRandomStatus('battery'));
-
-    const interval = setInterval(() => {
-      setWifiStatus(getRandomStatus('wifi'));
-      setBatteryStatus(getRandomStatus('battery'));
-    }, 5 * 60 * 1000); // 5 minutes in milliseconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Helper function to get the correct WiFi icon
-  const getWifiIcon = () => {
-    switch (wifiStatus) {
-      case 'high': return <Wifi className="h-4 w-4" />;
-      case 'medium': return <WifiMedium className="h-4 w-4" />;
-      case 'low': return <WifiLow className="h-4 w-4" />;
-      case 'off': return <WifiOff className="h-4 w-4" />;
-    }
-  };
-
-  // Helper function to get the correct Battery icon
-  const getBatteryIcon = () => {
-    switch (batteryStatus) {
-      case 'high': return <Battery className="h-4 w-4" />;
-      case 'medium': return <BatteryMedium className="h-4 w-4" />;
-      case 'low': return <BatteryLow className="h-4 w-4" />;
-      case 'charging': return <BatteryCharging className="h-4 w-4" />;
-    }
-  };
-
-  const getWifiColor = (status: string) => {
-    switch (status) {
-      case 'high': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'low': return 'text-orange-500';
-      case 'off': return 'text-red-500';
-      default: return '';
-    }
-  };
-
-  const getBatteryColor = (status: string) => {
-    switch (status) {
-      case 'high': return 'text-green-500';
-      case 'medium': return 'text-yellow-500';
-      case 'low': return 'text-red-500';
-      case 'charging': return 'text-blue-500';
-      default: return '';
     }
   };
 
@@ -262,10 +197,10 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
           <div className="flex items-center gap-0.5">
             {/* System Tray Icons */}
             <div className="flex items-center">
-              {/* <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
+              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
                 <ChevronUp className="h-4 w-4" />
-              </Button> */}
-
+              </Button>
+            
               <Button
                 variant="ghost"
                 size="icon"
@@ -287,30 +222,14 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
 
             {/* Network, Sound, Battery Group */}
             <div className="flex items-center px-1 hover:bg-accent rounded-sm">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 px-0 relative group"
-                title={`WiFi: ${wifiStatus}`}
-              >
-                <div className={getWifiColor(wifiStatus)}>{getWifiIcon()}</div>
-                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-background/90 backdrop-blur-sm px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  WiFi: {wifiStatus}
-                </span>
+              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
+                <Wifi className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
                 <Volume2 className="h-4 w-4" />
               </Button>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 px-0 relative group"
-                title={`Battery Status: ${batteryStatus}`}
-              >
-                <div className={getBatteryColor(batteryStatus)}>{getBatteryIcon()}</div>
-                <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-background/90 backdrop-blur-sm px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  Battery: {batteryStatus}
-                </span>
+              <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
+                <Battery className="h-4 w-4" />
               </Button>
             </div>
 

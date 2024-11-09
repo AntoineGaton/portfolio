@@ -1,6 +1,7 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiOff, WifiMedium } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiMedium, WifiOff } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -148,7 +149,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
   const getWifiIcon = () => {
     switch (wifiStatus) {
       case 'high': return <Wifi className="h-4 w-4" />;
-      case 'medium': return <WifiMedium className="h-4 w-4" />;
+      case 'medium': return <Wifi2 className="h-4 w-4" />;
       case 'low': return <WifiLow className="h-4 w-4" />;
       case 'off': return <WifiOff className="h-4 w-4" />;
     }

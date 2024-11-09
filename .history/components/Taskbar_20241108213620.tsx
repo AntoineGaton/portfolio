@@ -1,6 +1,7 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiOff, WifiMedium } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Wifi, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, WifiLow, WifiMedium, WifiOff } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -305,7 +306,7 @@ export function Taskbar({ openWindows = [], onWindowRestore }: TaskbarProps) {
                 variant="ghost" 
                 size="icon" 
                 className="h-8 w-8 px-0 relative group"
-                title={`Battery Status: ${batteryStatus}`}
+                title={`Battery: ${batteryStatus}`}
               >
                 <div className={getBatteryColor(batteryStatus)}>{getBatteryIcon()}</div>
                 <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-background/90 backdrop-blur-sm px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
