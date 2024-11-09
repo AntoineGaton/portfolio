@@ -4,18 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 interface Command {
 input: string;
 output: string;
-isJSMode: boolean;
-isGameMode?: boolean;
-}
-
-interface GameState {
-  currentScene: string;
-  inventory: string[];
-  stats: {
-    coding: number;
-    creativity: number;
-    resilience: number;
-  };
 }
 
 export function Terminal() {
@@ -24,17 +12,6 @@ const [currentInput, setCurrentInput] = useState('');
 const [commandHistory, setCommandHistory] = useState<string[]>([]);
 const [historyIndex, setHistoryIndex] = useState(-1);
 const [isJSMode, setIsJSMode] = useState(false);
-const [jsContext, setJsContext] = useState<Record<string, any>>({});
-const [isGameMode, setIsGameMode] = useState(false);
-const [gameState, setGameState] = useState<GameState>({
-  currentScene: 'intro',
-  inventory: [],
-  stats: {
-    coding: 1,
-    creativity: 1,
-    resilience: 1,
-  }
-});
 const inputRef = useRef<HTMLInputElement>(null);
 const commandsEndRef = useRef<HTMLDivElement>(null);
 
@@ -53,8 +30,7 @@ const handleKeyDown = (e: React.KeyboardEvent) => {
          setIsJSMode(false);
          setCommands(prev => [...prev, { 
             input: '^C', 
-            output: 'Exited JavaScript environment',
-            isJSMode: false
+            output: 'Exited JavaScript environment' 
          }]);
          return;
       }
@@ -177,150 +153,34 @@ const processCommand = (input: string): string => {
       case 'js':
       case 'javascript':
         setIsJSMode(true);
-        setJsContext({});
         return 'Entering JavaScript environment (Ctrl+C to exit)';
-
-      case 'game':
-        setIsGameMode(true);
-        setGameState({
-          currentScene: 'intro',
-          inventory: [],
-          stats: { coding: 1, creativity: 1, resilience: 1 }
-        });
-        return `Welcome to "The Code Monkey's Path"!
-A text-based adventure game based on a true story.
-
-Type 'look' to examine your surroundings
-Type 'stats' to view your current stats
-Type 'inventory' to check your items
-Type 'quit' to exit the game
-
-Press Enter to begin your journey...`;
 
       default:
       return `Command not found: ${command}. Type 'help' for available commands.`;
    }
 };
 
-const processGameCommand = (input: string): string => {
-  const command = input.toLowerCase().trim();
-
-  if (command === 'quit') {
-    setIsGameMode(false);
-    return 'Thanks for playing!';
-  }
-
-  if (command === 'stats') {
-    return `Your Stats:
-Coding: ${gameState.stats.coding}
-Creativity: ${gameState.stats.creativity}
-Resilience: ${gameState.stats.resilience}`;
-  }
-
-  if (command === 'inventory') {
-    return gameState.inventory.length > 0 
-      ? `Your inventory: ${gameState.inventory.join(', ')}` 
-      : 'Your inventory is empty';
-  }
-
-  switch (gameState.currentScene) {
-    case 'intro':
-      if (command === 'look') {
-        return `The Bronx, NY - 1990s
-
-You find yourself in your childhood bedroom, surrounded by comics, books, and the soft glow of an old computer monitor. The streets outside are busy with the usual sounds of the city, but in here, you've created your own sanctuary.
-
-Options:
-1) Explore the computer
-2) Read some comics
-3) Look out the window`;
-      }
-      if (['1', 'explore computer', 'computer'].includes(command)) {
-        setGameState(prev => ({
-          ...prev,
-          currentScene: 'computer',
-          stats: { ...prev.stats, coding: prev.stats.coding + 1 }
-        }));
-        return `You sit down at the old computer, its fan humming quietly. The screen flickers to life, showing a basic DOS prompt. Something about it captivates you...
-
-Your coding skill increased!
-
-Options:
-1) Try typing some commands
-2) Look through the programs
-3) Go back to exploring the room`;
-      }
-      // Add more scene interactions here
-      return "Try looking around first with the 'look' command";
-
-    // Add more scenes here
-    default:
-      return "I don't understand that command.";
-  }
-};
-
 const handleSubmit = (e: React.FormEvent) => {
   e.preventDefault();
   if (!currentInput.trim()) return;
 
-  if (isGameMode) {
-    const output = processGameCommand(currentInput);
-    setCommands(prev => [...prev, { 
-      input: currentInput, 
-      output,
-      isJSMode: false,
-      isGameMode: true
-    }]);
-  } else if (isJSMode) {
+  if (isJSMode) {
     try {
-      // Create a function with all previous context
-      const contextKeys = Object.keys(jsContext);
-      const contextValues = Object.values(jsContext);
-      
-      // Handle multi-line code and different types of statements
-      let result;
-      try {
-        // First try to evaluate as an expression
-        result = new Function(...contextKeys, `return ${currentInput}`)(...contextValues);
-      } catch {
-        // If that fails, try to execute as statements
-        result = new Function(...contextKeys, currentInput)(...contextValues);
-      }
-
-      // Update context with any new declarations
-      const newContext = { ...jsContext };
-      try {
-        const contextUpdates = new Function(
-          ...contextKeys,
-          `${currentInput}; return { ${contextKeys.join(',')} };`
-        )(...contextValues);
-        Object.assign(newContext, contextUpdates);
-      } catch (e) {
-        // Ignore context update errors
-      }
-      setJsContext(newContext);
-
-      // Add command to history
+      const result = eval(currentInput);
       setCommands(prev => [...prev, { 
         input: currentInput, 
-        output: result !== undefined ? String(result) : '',
-        isJSMode: true
+        output: result !== undefined ? String(result) : '' 
       }]);
     } catch (error) {
       setCommands(prev => [...prev, { 
         input: currentInput, 
-        output: `Error: ${(error as Error).message}`,
-        isJSMode: true
+        output: `Error: ${error.message}` 
       }]);
     }
   } else {
     const output = processCommand(currentInput);
     if (currentInput.trim().toLowerCase() !== 'clear') {
-      setCommands(prev => [...prev, { 
-        input: currentInput, 
-        output,
-        isJSMode: false 
-      }]);
+      setCommands(prev => [...prev, { input: currentInput, output }]);
       setCommandHistory(prev => [...prev, currentInput]);
     }
   }
@@ -342,7 +202,7 @@ const executeCode = (language: string, code: string): string => {
         return `Unsupported language: ${language}`;
     }
   } catch (error) {
-    return `Error: ${error instanceof Error ? error.message : String(error)}`;
+    return `Error: ${error.message}`;
   }
 };
 
@@ -359,23 +219,15 @@ return (
       {commands.map((cmd, i) => (
          <div key={i}>
             <div className="flex items-center">
-               {cmd.isJSMode ? (
-                  <span className="text-yellow-400">js&gt;</span>
-               ) : (
-                  <>
-                     <span className="text-blue-400">guest@portfolio</span>
-                     <span className="text-gray-400">:~$</span>
-                  </>
-               )}
-               <span className="ml-2">{cmd.input}</span>
+            <span className="text-blue-400">guest@portfolio</span>
+            <span className="text-gray-400">:~$</span>
+            <span className="ml-2">{cmd.input}</span>
             </div>
             <div className="whitespace-pre-wrap">{cmd.output}</div>
          </div>
       ))}
       <div className="flex items-center">
-         {isGameMode ? (
-            <span className="text-purple-400">game&gt;</span>
-         ) : isJSMode ? (
+         {isJSMode ? (
             <span className="text-yellow-400">js&gt;</span>
          ) : (
             <>

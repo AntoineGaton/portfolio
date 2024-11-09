@@ -373,9 +373,7 @@ return (
          </div>
       ))}
       <div className="flex items-center">
-         {isGameMode ? (
-            <span className="text-purple-400">game&gt;</span>
-         ) : isJSMode ? (
+         {isJSMode ? (
             <span className="text-yellow-400">js&gt;</span>
          ) : (
             <>
