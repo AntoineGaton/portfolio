@@ -105,7 +105,6 @@ export function Window({
   const [storedPosition, setStoredPosition] = useState({ x: 0, y: 0 });
   const [isFullscreen, setIsFullscreen] = useState(defaultIsFullscreen);
   const [previousPosition, setPreviousPosition] = useState({ x: 100, y: 50 });
-  const controls = useAnimation();
 
   useEffect(() => {
     if (defaultIsFullscreen) {
@@ -248,41 +247,18 @@ export function Window({
 
   if (isMinimized) {
     const target = getMinimizeTarget(id, position);
-    return (
-      <motion.div
-        initial={false}
-        animate={{
-          scale: 0.5,
-          opacity: 0,
-          x: target.x,
-          y: target.y,
-          transition: { duration: 0.2, ease: "easeIn" }
-        }}
-        onAnimationComplete={() => {
-          if (onMinimizeComplete) {
-            onMinimizeComplete();
-          }
-        }}
-        style={{ 
-          position: 'fixed',
-          zIndex: isActive ? 50 : windowIndex,
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          width: `${size.width}px`,
-          height: `${size.height}px`
-        }}
-      >
-        <Card
-          ref={windowRef}
-          className={cn(
-            "bg-background border rounded-lg shadow-lg overflow-hidden select-none",
-            className
-          )}
-        >
-          {children}
-        </Card>
-      </motion.div>
-    );
+    controls.start({
+      scale: 0.5,
+      opacity: 0,
+      x: target.x,
+      y: target.y,
+      transition: { duration: 0.2, ease: "easeIn" }
+    }).then(() => {
+      if (onMinimizeComplete) {
+        onMinimizeComplete();
+      }
+    });
+    return null;
   }
 
   return (

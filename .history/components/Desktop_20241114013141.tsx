@@ -15,7 +15,6 @@ import { ProjectsContent } from "./window-contents/ProjectsContent";
 import { Terminal } from './Terminal';
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { ReadmeContent } from "./window-contents/ReadmeContent";
-import { Taskbar } from "./Taskbar";
 
 /**
  * Window State Interface
@@ -81,6 +80,7 @@ const getWindowSize = (id: string) => {
 export function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
   const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
+  const [minimizedWindows, setMinimizedWindows] = useState<string[]>([]);
 
   // Add debug logging for state changes
   useEffect(() => {
@@ -174,7 +174,7 @@ export function Desktop() {
   }, [openWindows]); // Add openWindows as dependency
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="fixed inset-0 bottom-12">
       <div className="grid grid-flow-col auto-cols-[100px] grid-rows-[repeat(auto-fill,100px)] gap-1 p-1 h-full">
         {desktopIcons.map((icon) => (
           <DesktopIcon
@@ -229,22 +229,6 @@ export function Desktop() {
           </Window>
         );
       })}
-
-      <Taskbar
-        openWindows={openWindows}
-        onWindowRestore={(id) => {
-          setOpenWindows(prev => prev.map(window => 
-            window.id === id ? { ...window, isMinimized: false } : window
-          ));
-          setActiveWindowId(id);
-        }}
-        onWindowOpen={(id) => {
-          if (!openWindows.find(w => w.id === id)) {
-            setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
-            setActiveWindowId(id);
-          }
-        }}
-      />
     </div>
   );
 }

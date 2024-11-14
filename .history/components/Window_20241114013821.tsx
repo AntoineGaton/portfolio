@@ -250,34 +250,22 @@ export function Window({
     const target = getMinimizeTarget(id, position);
     return (
       <motion.div
+        animate={controls}
         initial={false}
-        animate={{
-          scale: 0.5,
-          opacity: 0,
-          x: target.x,
-          y: target.y,
-          transition: { duration: 0.2, ease: "easeIn" }
-        }}
-        onAnimationComplete={() => {
-          if (onMinimizeComplete) {
-            onMinimizeComplete();
-          }
-        }}
-        style={{ 
-          position: 'fixed',
-          zIndex: isActive ? 50 : windowIndex,
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-          width: `${size.width}px`,
-          height: `${size.height}px`
-        }}
+        style={{ position: 'fixed', zIndex: isActive ? 50 : windowIndex }}
       >
         <Card
           ref={windowRef}
           className={cn(
-            "bg-background border rounded-lg shadow-lg overflow-hidden select-none",
+            "fixed bg-background border rounded-lg shadow-lg overflow-hidden select-none",
             className
           )}
+          style={{
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+            width: `${size.width}px`,
+            height: `${size.height}px`
+          }}
         >
           {children}
         </Card>

@@ -232,17 +232,10 @@ export function Desktop() {
 
       <Taskbar
         openWindows={openWindows}
-        onWindowRestore={(id) => {
-          setOpenWindows(prev => prev.map(window => 
-            window.id === id ? { ...window, isMinimized: false } : window
-          ));
-          setActiveWindowId(id);
-        }}
+        onWindowRestore={handleRestore}
         onWindowOpen={(id) => {
-          if (!openWindows.find(w => w.id === id)) {
-            setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
-            setActiveWindowId(id);
-          }
+          setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
+          setActiveWindowId(id);
         }}
       />
     </div>
