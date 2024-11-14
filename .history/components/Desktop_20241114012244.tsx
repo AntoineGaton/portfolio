@@ -63,15 +63,6 @@ const getWindowSize = (id: string) => {
       return { width: '800px', height: '600px' };
     case "contact":
       return { width: '500px', height: '600px' };
-    case "projects":
-      return { width: '900px', height: '700px' };
-    case "terminal":
-      return { width: '600px', height: '400px' };
-    default:
-      return { width: '400px', height: '200px' };
-  }
-};
-
 /**
  * Desktop Component
  * Manages the main desktop interface including windows and icons
@@ -176,11 +167,13 @@ export function Desktop() {
       </div>
 
       {openWindows.map((window) => {
-        const position = {
-          x: 50 + (openWindows.indexOf(window) * 30),
-          y: 50 + (openWindows.indexOf(window) * 30),
-          ...getWindowSize(window.id)
-        };
+        const position = window.id === "experience" 
+          ? { x: 50, y: 50, width: '770px', height: '900px' }
+          : window.id === "about" 
+          ? { x: 50, y: 50, width: '1000px', height: '800px' }
+          : window.id === "portfolio"
+          ? { x: 0, y: 0, width: '100vw', height: '100vh' }
+          : calculateNextPosition(window.id, openWindows.indexOf(window));
 
         return (
           <Window

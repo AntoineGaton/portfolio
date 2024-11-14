@@ -96,8 +96,8 @@ export function Window({
     y: initialPosition?.y || calculateNextPosition(windowIndex).y
   });
   const [size, setSize] = useState({ 
-    width: initialPosition?.width ? parseInt(initialPosition.width) : 400, // Default width to 400px
-    height: initialPosition?.height ? parseInt(initialPosition.height) : 200 // Default height to 200px
+    width: initialPosition?.width ? parseInt(initialPosition.width) : 400, 
+    height: initialPosition?.height ? parseInt(initialPosition.height) : 200
   });
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [resizeDirection, setResizeDirection] = useState<string | null>(null);
