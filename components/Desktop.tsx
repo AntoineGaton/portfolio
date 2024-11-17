@@ -44,12 +44,27 @@ interface DesktopIcon {
 
 // Add this function before the Desktop component
 const calculateNextPosition = (windowId: string, index: number) => {
-  const baseOffset = 50; // Base offset in pixels
+  const baseOffset = 50;
+  const offsetStep = 30;
+  
+  // Calculate position within safe bounds
+  const maxX = typeof window !== 'undefined' ? window.innerWidth - 800 : 800;  // 800 is default window width
+  const maxY = typeof window !== 'undefined' ? window.innerHeight - 648 : 600;  // 600 + 48 for default height + taskbar
+  
+  const x = Math.max(baseOffset, Math.min(
+    baseOffset + (index * offsetStep),
+    maxX
+  ));
+  
+  const y = Math.max(baseOffset, Math.min(
+    baseOffset + (index * offsetStep),
+    maxY
+  ));
+  
   return {
-    x: baseOffset + (index * 30),
-    y: baseOffset + (index * 30),
-    width: windowId === "experience" ? '770px' : '1000px',  // Special width for experience window
-    height: windowId === "experience" ? '900px' : '800px'   // Special height for experience window
+    x,
+    y,
+    width: windowId === "experience" ? '770px' : '1000px'
   };
 };
 
@@ -74,6 +89,44 @@ const getWindowSize = (id: string) => {
   }
 };
 
+const getWindowTitle = (id: string) => {
+  switch (id) {
+    case "about":
+      return "About Me";
+    default:
+      return id.charAt(0).toUpperCase() + id.slice(1);
+  }
+};
+
+const getWindowContent = (id: string) => {
+  switch (id) {
+    case "portfolio":
+      return PortfolioContent;
+    case "about":
+      return AboutContent;
+    case "projects":
+      return ProjectsContent;
+    case "experience":
+      return ExperienceContent;
+    case "resume":
+      return ResumeContent;
+    case "contact":
+      return ContactContent;
+    case "games":
+      return GamesContent;
+    case "apps":
+      return AppsContent;
+    case "terminal":
+      return Terminal;
+    case "readme":
+      return ReadmeContent;
+    case "settings":
+      return SettingsContent;
+    default:
+      return () => <div>Unknown window content</div>;
+  }
+};
+
 /**
  * Desktop Component
  * Manages the main desktop interface including windows and icons
@@ -81,7 +134,7 @@ const getWindowSize = (id: string) => {
  */
 export function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowState[]>([]);
-  const [activeWindowId, setActiveWindowId] = useState<string | null>(null);
+  const [activeWindow, setActiveWindow] = useState<string | null>(null);
 
   // Add debug logging for state changes
   useEffect(() => {
@@ -89,8 +142,8 @@ export function Desktop() {
   }, [openWindows]);
 
   useEffect(() => {
-    console.log('Active window:', activeWindowId);
-  }, [activeWindowId]);
+    console.log('Active window:', activeWindow);
+  }, [activeWindow]);
 
   const desktopIcons: DesktopIcon[] = [
     { id: "about", icon: User2, label: "About Me" },
@@ -104,45 +157,45 @@ export function Desktop() {
     { id: "readme", icon: FileText, label: "README" },
   ];
 
-  const handleIconClick = (id: string) => {
-    console.log('handleIconClick called with id:', id); // Debug log
-    
-    if (!openWindows.find(window => window.id === id)) {
-      console.log('Creating new window for:', id); // Debug log
-      setOpenWindows(prev => {
-        const newWindows = [...prev, { id, isMinimized: false }];
-        console.log('New windows state:', newWindows); // Debug log
-        return newWindows;
-      });
-      setActiveWindowId(id);
+  const handleWindowOpen = (id: string) => {
+    if (!openWindows.some(window => window.id === id)) {
+      setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
+      setActiveWindow(id);
     } else {
-      console.log('Window exists, updating:', id); // Debug log
-      setOpenWindows(prev => prev.map(window => 
-        window.id === id ? { ...window, isMinimized: false } : window
-      ));
-      setActiveWindowId(id);
+      // If window exists but is minimized, restore it
+      if (openWindows.find(window => window.id === id)?.isMinimized) {
+        handleWindowRestore(id);
+      }
+      setActiveWindow(id);
     }
   };
 
-  const handleMinimize = (id: string) => {
+  const handleWindowClose = (id: string) => {
+    setOpenWindows(prev => prev.filter(window => window.id !== id));
+    if (activeWindow === id) {
+      const remainingWindows = openWindows.filter(window => window.id !== id && !window.isMinimized);
+      setActiveWindow(remainingWindows.length > 0 ? remainingWindows[remainingWindows.length - 1].id : null);
+    }
+  };
+
+  const handleWindowMinimize = (id: string) => {
     setOpenWindows(prev => prev.map(window => 
       window.id === id ? { ...window, isMinimized: true } : window
     ));
-    setActiveWindowId(null);
+    // Set active window to the next non-minimized window, if any
+    const nextActiveWindow = openWindows.find(window => !window.isMinimized && window.id !== id);
+    setActiveWindow(nextActiveWindow?.id || null);
   };
 
-  const handleRestore = (id: string) => {
+  const handleWindowRestore = (id: string) => {
     setOpenWindows(prev => prev.map(window => 
       window.id === id ? { ...window, isMinimized: false } : window
     ));
-    setActiveWindowId(id);
+    setActiveWindow(id);
   };
 
-  const handleClose = (id: string) => {
-    setOpenWindows(prev => prev.filter(w => w.id !== id));
-    if (activeWindowId === id) {
-      setActiveWindowId(null);
-    }
+  const handleWindowClick = (id: string) => {
+    setActiveWindow(id);
   };
 
   useEffect(() => {
@@ -164,7 +217,7 @@ export function Desktop() {
       
       // Set active window with a slight delay to ensure state is updated
       setTimeout(() => {
-        setActiveWindowId(windowId);
+        setActiveWindow(windowId);
       }, 0);
     };
 
@@ -183,69 +236,38 @@ export function Desktop() {
             icon={icon.icon}
             label={icon.label}
             onClick={() => {
-              console.log('Icon clicked:', icon.id); // Debug log
-              handleIconClick(icon.id);
+              console.log('Icon clicked:', icon.id);
+              handleWindowOpen(icon.id);
             }}
           />
         ))}
       </div>
 
-      {openWindows.map((window) => {
-        const position = {
-          x: 50 + (openWindows.indexOf(window) * 30),
-          y: 50 + (openWindows.indexOf(window) * 30),
-          ...getWindowSize(window.id)
-        };
-
+      {openWindows.map((window, index) => {
+        const WindowContent = getWindowContent(window.id);
+        const initialPos = calculateNextPosition(window.id, index);
         return (
           <Window
             key={window.id}
             id={window.id}
-            title={window.id === "about" ? "About Me" : window.id.charAt(0).toUpperCase() + window.id.slice(1)}
-            isActive={activeWindowId === window.id}
+            title={getWindowTitle(window.id)}
+            isActive={activeWindow === window.id}
             isMinimized={window.isMinimized}
-            isFullscreen={window.id === "portfolio"}
-            onClose={() => {
-              setOpenWindows(prev => prev.filter(w => w.id !== window.id));
-              if (activeWindowId === window.id) {
-                setActiveWindowId(null);
-              }
-            }}
-            onClick={() => setActiveWindowId(window.id)}
-            onMinimize={() => handleMinimize(window.id)}
-            windowIndex={openWindows.indexOf(window)}
-            initialPosition={position}
+            onClose={() => handleWindowClose(window.id)}
+            onClick={() => handleWindowClick(window.id)}
+            onMinimize={() => handleWindowMinimize(window.id)}
+            windowIndex={index}
+            initialPosition={initialPos}
           >
-            {window.id === "portfolio" && <PortfolioContent />}
-            {window.id === "about" && <AboutContent />}
-            {window.id === "projects" && <ProjectsContent />}
-            {window.id === "experience" && <ExperienceContent />}
-            {window.id === "resume" && <ResumeContent />}
-            {window.id === "contact" && <ContactContent />}
-            {window.id === "games" && <GamesContent />}
-            {window.id === "apps" && <AppsContent />}
-            {window.id === "terminal" && <Terminal />}
-            {window.id === "portfolio" && <PortfolioContent />}
-            {window.id === "readme" && <ReadmeContent />}
-            {window.id === "settings" && <SettingsContent />}
+            <WindowContent />
           </Window>
         );
       })}
 
       <Taskbar
         openWindows={openWindows}
-        onWindowRestore={(id) => {
-          setOpenWindows(prev => prev.map(window => 
-            window.id === id ? { ...window, isMinimized: false } : window
-          ));
-          setActiveWindowId(id);
-        }}
-        onWindowOpen={(id) => {
-          if (!openWindows.find(w => w.id === id)) {
-            setOpenWindows(prev => [...prev, { id, isMinimized: false }]);
-            setActiveWindowId(id);
-          }
-        }}
+        onWindowRestore={handleWindowRestore}
+        onWindowOpen={handleWindowOpen}
       />
     </div>
   );

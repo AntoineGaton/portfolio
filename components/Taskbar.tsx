@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, Wifi, WifiHigh, WifiLow, Settings } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, Wifi, WifiHigh, WifiLow, Settings, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -51,17 +51,32 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
    * @param {string} id - Window identifier
    * @returns {LucideIcon} Corresponding icon component
    */
-  const getIconForWindow = (id: string) => {
+  const getWindowIcon = (id: string) => {
     switch (id) {
-      case "about": return User2;
-      case "projects": return Code2;
-      case "experience": return Briefcase;
-      case "resume": return FileText;
-      case "contact": return Mail;
-      case "games": return Gamepad2;
-      case "terminal": return Terminal;
-      case "app": return AppWindow;
-      default: return Monitor;
+      case "about":
+        return User2;
+      case "projects":
+        return Code2;
+      case "experience":
+        return Briefcase;
+      case "resume":
+        return FileText;
+      case "games":
+        return Gamepad2;
+      case "apps":
+        return AppWindow;
+      case "portfolio":
+        return Globe;
+      case "contact":
+        return Mail;
+      case "terminal":
+        return Terminal;
+      case "readme":
+        return FileText;
+      case "settings":
+        return Settings;
+      default:
+        return AppWindow;
     }
   };
 
@@ -218,20 +233,21 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
 
             {/* Minimized Windows Icons */}
             <div className="flex items-center gap-1">
-              {openWindows
-                .filter(window => window.isMinimized)
-                .map((window) => {
-                  const Icon = getIconForWindow(window.id);
-                  return (
-                    <TaskbarIcon
-                      key={window.id}
-                      id={window.id}
-                      icon={Icon}
-                      isMinimized={true}
-                      onClick={() => onWindowRestore(window.id)}
-                    />
-                  );
-                })}
+              {openWindows.map((window) => {
+                const Icon = getWindowIcon(window.id);
+                return (
+                  <Button
+                    key={window.id}
+                    variant="ghost"
+                    size="icon"
+                    className={`h-8 w-8 relative group ${!window.isMinimized ? 'bg-accent/50' : ''}`}
+                    onClick={() => window.isMinimized ? onWindowRestore(window.id) : onWindowOpen(window.id)}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Button>
+                );
+              })}
             </div>
 
             {/* Search Bar */}
@@ -300,6 +316,27 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
               <Terminal className="h-5 w-5" />
             </Button>
 
+            {/* Minimized Windows Icons */}
+            <div className="flex items-center gap-1">
+              {openWindows
+                .filter(window => window.isMinimized)
+                .map((window) => {
+                  const Icon = getWindowIcon(window.id);
+                  return (
+                    <Button
+                      key={window.id}
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 relative group"
+                      onClick={() => onWindowRestore(window.id)}
+                    >
+                      <Icon className="h-5 w-5" />
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </Button>
+                  );
+                })}
+            </div>
+
             <Button 
               variant="ghost" 
               size="icon" 
@@ -343,10 +380,6 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
           <div className="flex items-center gap-0.5">
             {/* System Tray Icons */}
             <div className="flex items-center">
-              {/* <Button variant="ghost" size="icon" className="h-8 w-8 px-0">
-                <ChevronUp className="h-4 w-4" />
-              </Button> */}
-
               <Button
                 variant="ghost"
                 size="icon"
@@ -363,7 +396,6 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
                   </>
                 )}
               </Button>
-
             </div>
 
             {/* Network, Sound, Battery Group */}
@@ -408,8 +440,10 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
 
       {/* Center Menu Overlay */}
       {centerMenuOpen && (
-        <div className="center-menu">
-          <CenterMenu onClose={() => setCenterMenuOpen(false)} />
+        <div className="fixed bottom-12 left-0 w-screen h-screen bg-black/50 z-40">
+          <div className="absolute bottom-0 left-0">
+            <CenterMenu onClose={() => setCenterMenuOpen(false)} />
+          </div>
         </div>
       )}
     </>

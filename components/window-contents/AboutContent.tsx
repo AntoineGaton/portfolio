@@ -90,13 +90,13 @@ export function AboutContent() {
             <Image
               src="/images/Antoine01.jpg"
               alt="Antoine Gaton"
-              layout="fill"
-              objectFit="cover"
-              className="rounded-full"
+              fill
+              className="rounded-full object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority
             />
           </div>
         </div>
-
 
         {/* Keep other existing sections */}
         <div className="space-y-4 text-center">

@@ -203,9 +203,10 @@ export function ContactContent() {
               <Image
                 src="/images/AntoineAI.jpg"
                 alt="Profile picture"
-                layout="fill"
-                objectFit="cover"
-                className="rounded-full"
+                fill
+                className="rounded-full object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                priority
               />
             </div>
             <h2 className="text-2xl font-semibold mb-2">Antoine Gaton</h2>
