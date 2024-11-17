@@ -18,11 +18,11 @@
 
 @layer base {
   :root {
-    --background: 0 0% 97%;
+    --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 98%;
+    --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 98%;
+    --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
@@ -126,47 +126,15 @@
   .halloween {
     --background: 0 0% 0%;
     --foreground: 25 100% 50%;
-    --card: 0 0% 5%;
-    --card-foreground: 25 100% 50%;
-    --popover: 0 0% 5%;
-    --popover-foreground: 25 100% 50%;
     --primary: 25 100% 50%;
     --primary-foreground: 0 0% 0%;
-    --secondary: 25 100% 20%;
-    --secondary-foreground: 25 100% 50%;
-    --muted: 25 100% 20%;
-    --muted-foreground: 25 100% 40%;
-    --accent: 25 100% 20%;
-    --accent-foreground: 25 100% 50%;
-    --destructive: 0 100% 30%;
-    --destructive-foreground: 25 100% 50%;
-    --border: 25 100% 20%;
-    --input: 25 100% 20%;
-    --ring: 25 100% 50%;
-    font-family: 'Creepster', cursive;
   }
 
   .christmas {
-    --background: 140 50% 15%;
-    --foreground: 0 80% 50%;
-    --card: 140 50% 20%;
-    --card-foreground: 0 80% 50%;
-    --popover: 140 50% 20%;
-    --popover-foreground: 0 80% 50%;
-    --primary: 0 80% 50%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 140 30% 30%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 140 30% 30%;
-    --muted-foreground: 0 0% 90%;
-    --accent: 0 0% 100%;
-    --accent-foreground: 140 50% 20%;
-    --destructive: 0 90% 40%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 140 30% 30%;
-    --input: 140 30% 30%;
-    --ring: 0 80% 50%;
-    font-family: 'Mountains of Christmas', cursive;
+    --background: 0 80% 40%;
+    --foreground: 120 60% 40%;
+    --primary: 120 60% 40%;
+    --primary-foreground: 0 80% 40%;
   }
 }
 
@@ -176,12 +144,6 @@
   }
   body {
     @apply bg-background text-foreground;
-    transition: background 0.3s ease, font-family 0.3s ease;
-    min-height: 100vh;
-    background-attachment: fixed !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
   }
 }
 

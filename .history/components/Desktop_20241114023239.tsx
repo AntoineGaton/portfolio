@@ -16,7 +16,6 @@ import { Terminal } from './Terminal';
 import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import { ReadmeContent } from "./window-contents/ReadmeContent";
 import { Taskbar } from "./Taskbar";
-import { SettingsContent } from "./window-contents/SettingsContent";
 
 /**
  * Window State Interface
@@ -227,7 +226,7 @@ export function Desktop() {
             {window.id === "terminal" && <Terminal />}
             {window.id === "portfolio" && <PortfolioContent />}
             {window.id === "readme" && <ReadmeContent />}
-            {window.id === "settings" && <SettingsContent />}
+            {w}
           </Window>
         );
       })}

@@ -23,8 +23,6 @@ export default function RootLayout({
           attribute="class"
           defaultTheme="system"
           enableSystem
-          themes={['light', 'dark', 'matrix', 'spring', 'summer', 'autumn', 'winter', 'halloween', 'christmas']}
-          forcedTheme={undefined}
           disableTransitionOnChange
         >
           {children}

@@ -176,12 +176,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    transition: background 0.3s ease, font-family 0.3s ease;
-    min-height: 100vh;
-    background-attachment: fixed !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
+    transition: font-family 0.3s ease;
   }
 }
 

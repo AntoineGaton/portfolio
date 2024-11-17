@@ -133,24 +133,6 @@ export function Background() {
   const [isSupported, setIsSupported] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const [hasCustomBackground, setHasCustomBackground] = useState(false);
-
-  useEffect(() => {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-          setHasCustomBackground(!!document.body.style.backgroundImage);
-        }
-      });
-    });
-
-    observer.observe(document.body, { attributes: true });
-    return () => observer.disconnect();
-  }, []);
-
-  if (hasCustomBackground) {
-    return null;
-  }
 
   useEffect(() => {
     const canvas = document.createElement('canvas');

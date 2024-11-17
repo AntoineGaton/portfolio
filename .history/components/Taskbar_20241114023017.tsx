@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Monitor, Mail, Folder, Terminal, Github, Chrome, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, Wifi, WifiHigh, WifiLow, Settings } from "lucide-react";
+import { Monitor, Mail, Folder, Terminal, Github, Chrome, Battery, Sun, Search, User2, Code2, Briefcase, FileText, Gamepad2, ChevronUp, Volume2, AppWindow, Maximize, Minimize2, Wifi, WifiHigh, WifiLow } from "lucide-react";
 import { useState, useEffect } from "react";
 import { CenterMenu } from "./CenterMenu";
 import { Clock } from "./Clock";
@@ -326,7 +326,7 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
               onClick={() => {
                 const event = new CustomEvent('openWindow', { 
                   detail: { 
-                    windowId: 'settings',
+                    windowId: 'terminal',
                     makeActive: true 
                   },
                   bubbles: true,
@@ -335,7 +335,7 @@ export function Taskbar({ openWindows = [], onWindowRestore, onWindowOpen }: Tas
                 window.dispatchEvent(event);
               }}
             >
-              <Settings className="h-5 w-5" />
+              <Terminal className="h-5 w-5" />
             </Button>
           </div>
           
